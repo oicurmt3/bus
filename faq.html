@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQs - Rate My Ride</title>
+    <style>
+        /* Styles copied from index.html for consistency */
+        :root {
+            --bg-color: #1a1a1a;
+            --text-color: #e0e0e0;
+            --card-bg: #2c2c2c;
+            --border-color: #444;
+            --input-bg: #333;
+            --input-text: #e0e0e0;
+            --button-bg: #007bff;
+            --button-text: #ffffff;
+            --button-hover-bg: #0056b3;
+            --button-secondary-bg: #555;
+            --button-secondary-hover-bg: #777;
+            --error-color: #dc3545;
+            --link-color: #00aaff; /* Example link color */
+            --link-hover-color: #0077cc; /* Example link hover color */
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { height: 100%; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; }
+        body { display: flex; flex-direction: column; align-items: center; padding: 15px; background-color: var(--bg-color); color: var(--text-color); }
+        .container { width: 100%; max-width: 800px; /* Adjusted max-width for content pages */ margin: 20px auto; padding: 20px 30px 30px 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); background-color: var(--card-bg); border: 1px solid var(--border-color); }
+
+        /* Content page specific styles */
+        h1, h2, h3 { color: var(--text-color); margin-top: 1.5em; margin-bottom: 0.5em; }
+        h1 { font-size: 2em; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-top: 0.5em;}
+        h2 { font-size: 1.5em; }
+        h3 { font-size: 1.2em; }
+        p { margin-bottom: 1em; }
+        ul { margin-left: 20px; margin-bottom: 1em; }
+        li { margin-bottom: 0.5em; }
+        strong, b { font-weight: bold; color: var(--text-color); } /* Ensure strong text is visible */
+        a { color: var(--link-color); text-decoration: none; }
+        a:hover { color: var(--link-hover-color); text-decoration: underline; }
+        hr { border: 0; border-top: 1px solid var(--border-color); margin: 2em 0; }
+        .warning { color: #ffcc00; /* Yellow warning color for dark theme */ font-weight: bold; }
+        .contact-info { margin-top: 15px; padding: 15px; background-color: var(--input-bg); border: 1px solid var(--border-color); border-radius: 4px; }
+        .back-link { display: inline-block; margin-top: 20px; padding: 10px 15px; background-color: var(--button-secondary-bg); color: var(--button-text); border-radius: 5px; text-decoration: none; transition: background-color 0.2s ease; }
+        .back-link:hover { background-color: var(--button-secondary-hover-bg); text-decoration: none; color: var(--button-text); }
+
+        /* Basic responsiveness */
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            .container { padding: 15px; margin: 10px auto; }
+            h1 { font-size: 1.6em; }
+            h2 { font-size: 1.3em; }
+            h3 { font-size: 1.1em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Frequently Asked Questions (FAQs) - Rate My Ride</h1>
+        <p><strong>Last Updated:</strong> 17 April 2025</p>
+
+        <p>Welcome to the FAQs for Rate My Ride, a service provided by https://sandgroper.net/bus/. Below are answers to common questions about using our service to rate and report Transperth bus rides. If you have further questions, please contact us at the email provided below.</p>
+
+        <h2>1. What is Rate My Ride?</h2>
+        <p>Rate My Ride is a web-based service that allows users to submit ratings and reports about their experiences on Transperth bus rides. Users can provide details such as the bus route, destination, date/time, location, overall rating, and comments, which are then displayed publicly on the "Ratings & Reports" page.</p>
+
+        <h2>2. Is Rate My Ride affiliated with Transperth?</h2>
+        <p><span class="warning">No, Rate My Ride is not affiliated with, endorsed by, or sponsored by Transperth or any associated entities.</span> It is an independent service operated by sandgroper.net to provide a platform for users to share their bus ride experiences.</p>
+
+        <h2>3. How do I submit a rating or report?</h2>
+        <p>To submit a rating or report, visit https://sandgroper.net/bus/ and fill out the form with details about your bus ride, including the route, destination, date/time, location (optional), overall rating, and any comments. Once submitted, your rating or report will be logged and may appear on the "Ratings & Reports" page at https://sandgroper.net/bus/view_ratings.php.</p>
+
+        <h2>4. Is my submission anonymous?</h2>
+        <p>You do not need to provide your name or contact details to submit a rating or report. However, please note that your submission is not entirely anonymous, as we log your IP address for security purposes, and the combination of location, date/time, and comments may potentially identify you. <span class="warning">Do not include personally identifiable information in your comments.</span></p>
+
+        <h2>5. Will my submission be made public?</h2>
+        <p><span class="warning">Yes, all submitted information (excluding your IP address) is made publicly available</span> on the "Ratings & Reports" page, including bus route, destination, date/time, location, overall rating, and comments. Please ensure you are comfortable with this before submitting.</p>
+
+        <h2>6. Can I edit or delete my submission?</h2>
+        <p>Due to the public nature of the service, there is no automated way to edit or delete submissions. If you believe your submission contains incorrect information or sensitive details you wish to have removed, please contact us at info@sandgroper.net. We will review requests on a case-by-case basis, but removal may not always be feasible or immediate.</p>
+
+        <h2>7. How accurate is the location data?</h2>
+        <p>Location data is provided voluntarily by users and is meant to indicate the general area of the bus ride. We do not verify the accuracy of location data, and it may not be precise. <span class="warning">Locations are a guide only and may not be accurate.</span></p>
+
+        <h2>8. Does submitting a report guarantee action by Transperth?</h2>
+        <p>No, submitting a rating or report through Rate My Ride does not guarantee that Transperth or any other party will take action. The service is designed to collect and share user feedback, but we have no control over how Transperth or others respond to the information provided.</p>
+
+        <h2>9. Why are cookies used on the site?</h2>
+        <p>We may use cookies to limit the number of submissions from a single browser within a specific time period to prevent abuse of the service. These cookies store non-personally identifiable information, such as submission counts and timestamps. You can manage cookie preferences in your browser settings, but disabling cookies may affect your ability to submit ratings or reports if rate limiting is active.</p>
+
+        <h2>10. How is my personal information handled?</h2>
+        <p>We collect limited personal information, such as your IP address (for security purposes) and any information you voluntarily provide (e.g., location, comments). For full details, please review our <a href="privacy.html">Privacy Policy</a>. We take reasonable steps to protect your information, but please be aware that submitted ratings and reports are publicly displayed (excluding IP addresses).</p>
+
+        <h2>11. Can I use Rate My Ride outside of Western Australia?</h2>
+        <p>Rate My Ride is designed for rating and reporting Transperth bus rides, which operate in Western Australia. While the service is accessible globally, it is primarily relevant for users of Transperth services.</p>
+
+        <h2>12. What should I do if I see inappropriate content?</h2>
+        <p>If you believe a rating or report contains inappropriate, offensive, or unlawful content, please contact us at info@sandgroper.net. We reserve the right to remove content that violates our <a href="terms.html">Terms and Conditions</a>, but we do not actively monitor all submissions.</p>
+
+        <h2>13. How can I contact you?</h2>
+        <p>If you have any questions, concerns, or feedback about Rate My Ride, please contact us at:</p>
+        <div class="contact-info">
+            info@sandgroper.net
+        </div>
+
+        <hr>
+        <a href="index.html" class="back-link">Back to Rate My Ride</a>
+    </div>
+</body>
+</html>

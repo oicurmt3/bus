@@ -1,0 +1,879 @@
+[
+    {
+        "bus_number": "2401",
+        "route_number": "930",
+        "destination": "Elizabeth Quay",
+        "start_latitude": "-31.994730",
+        "start_longitude": "115.913265",
+        "start_timestamp": "09/04/2025, 06:28 am",
+        "overall_experience": [
+            {
+                "value": "3",
+                "text": "Very Bad"
+            }
+        ],
+        "braking_quality": [
+            {
+                "value": "1",
+                "text": "Extremely Jerky"
+            }
+        ],
+        "acceleration_quality": [
+            {
+                "value": "7",
+                "text": "Average"
+            }
+        ],
+        "cornering_quality": [
+            {
+                "value": "5",
+                "text": "Good"
+            }
+        ],
+        "comments": "Never feathered his brakes. Very very jerky when stopping.",
+        "clientSubmissionTimestamp": "09/04/2025, 06:29 am",
+        "serverTimestamp": "09/04/2025, 06:29 AM",
+        "ipAddress": "45.248.78.229"
+    },
+    {
+        "bus_number": "3109",
+        "route_number": "27",
+        "destination": "Claremont Station",
+        "start_latitude": "-31.952759",
+        "start_longitude": "115.850236",
+        "start_timestamp": "09/04/2025, 07:06 am",
+        "overall_experience": [
+            {
+                "value": "5",
+                "text": "Average"
+            }
+        ],
+        "acceleration_quality": [
+            {
+                "value": "4",
+                "text": "Jerky"
+            }
+        ],
+        "driver_conduct": [
+            {
+                "value": "5",
+                "text": "Polite"
+            }
+        ],
+        "clientSubmissionTimestamp": "09/04/2025, 07:07 am",
+        "serverTimestamp": "09/04/2025, 07:07 AM",
+        "ipAddress": "45.248.78.229"
+    },
+    {
+        "bus_number": "2856",
+        "route_number": "27",
+        "destination": "East Perth",
+        "start_latitude": "-31.950230",
+        "start_longitude": "115.816932",
+        "start_timestamp": "09/04/2025, 03:58 pm",
+        "overall_experience": [
+            {
+                "value": "4",
+                "text": "Bad"
+            }
+        ],
+        "braking_quality": [
+            {
+                "value": "2",
+                "text": "Jerky"
+            },
+            {
+                "value": "4",
+                "text": "Bad"
+            }
+        ],
+        "acceleration_quality": [
+            {
+                "value": "8",
+                "text": "Good"
+            }
+        ],
+        "cornering_quality": [
+            {
+                "value": "5",
+                "text": "Good"
+            }
+        ],
+        "driver_conduct": [
+            {
+                "value": "5",
+                "text": "Polite"
+            }
+        ],
+        "comments": "Had difficulties slowing down and approaching stops without jerking his brakes.",
+        "clientSubmissionTimestamp": "09/04/2025, 04:02 pm",
+        "serverTimestamp": "09/04/2025, 04:02 PM",
+        "ipAddress": "45.248.78.229"
+    },
+    {
+        "bus_number": "2458",
+        "route_number": "230",
+        "destination": "Thornlie Station",
+        "start_latitude": "-32.015967",
+        "start_longitude": "115.932979",
+        "start_timestamp": "09/04/2025, 04:49 pm",
+        "overall_experience": [
+            {
+                "value": "5",
+                "text": "Average"
+            }
+        ],
+        "braking_quality": [
+            {
+                "value": "6",
+                "text": "Average"
+            }
+        ],
+        "acceleration_quality": [
+            {
+                "value": "7",
+                "text": "Average"
+            }
+        ],
+        "driver_conduct": [
+            {
+                "value": "4",
+                "text": "Average"
+            }
+        ],
+        "clientSubmissionTimestamp": "09/04/2025, 04:50 pm",
+        "serverTimestamp": "09/04/2025, 04:50 PM",
+        "ipAddress": "45.248.78.229"
+    },
+    {
+        "bus_number": "2196",
+        "route_number": "930",
+        "destination": "Elizabeth Quay",
+        "start_latitude": "-31.968971",
+        "start_longitude": "115.890102",
+        "start_timestamp": "10/04/2025, 06:25 am",
+        "overall_experience": [
+            {
+                "value": "7",
+                "text": "Very Good"
+            }
+        ],
+        "braking_quality": [
+            {
+                "value": "7",
+                "text": "Good"
+            },
+            {
+                "value": "8",
+                "text": "Smooth"
+            }
+        ],
+        "acceleration_quality": [
+            {
+                "value": "5",
+                "text": "Average"
+            }
+        ],
+        "cleanliness": [
+            {
+                "value": "4",
+                "text": "Average"
+            }
+        ],
+        "driver_conduct": [
+            {
+                "value": "5",
+                "text": "Polite"
+            }
+        ],
+        "passenger_conduct": [
+            {
+                "value": "3",
+                "text": "Loud or Inconsiderate"
+            },
+            {
+                "value": "7",
+                "text": "Average"
+            }
+        ],
+        "comments": "Finally! A driver who's knows how to feather the brakes. It made such a huge difference.",
+        "clientSubmissionTimestamp": "10/04/2025, 06:27 am",
+        "serverTimestamp": "10/04/2025, 06:27 AM",
+        "ipAddress": "45.248.78.229"
+    },
+    {
+        "bus_number": "2862",
+        "route_number": "27",
+        "destination": "East Perth",
+        "start_latitude": "-31.956230",
+        "start_longitude": "115.807855",
+        "start_timestamp": "10/04/2025, 05:08 pm",
+        "overall_experience": [
+            {
+                "value": "5",
+                "text": "Average"
+            }
+        ],
+        "braking_quality": [
+            {
+                "value": "1",
+                "text": "No Feathering"
+            },
+            {
+                "value": "4",
+                "text": "Heavy"
+            }
+        ],
+        "driver_conduct": [
+            {
+                "value": "6",
+                "text": "Friendly"
+            }
+        ],
+        "clientSubmissionTimestamp": "10/04/2025, 05:10 pm",
+        "serverTimestamp": "10/04/2025, 05:10 PM",
+        "ipAddress": "45.248.78.229"
+    },
+    {
+        "bus_number": "2479",
+        "route_number": "230",
+        "destination": "Thornlie Station",
+        "start_latitude": "-31.987317",
+        "start_longitude": "115.909687",
+        "start_timestamp": "10/04/2025, 05:56 pm",
+        "overall_experience": [
+            {
+                "value": "4",
+                "text": "Bad"
+            }
+        ],
+        "braking_quality": [
+            {
+                "value": "2",
+                "text": "Jerky"
+            }
+        ],
+        "comments": "Driver couldn't smoothly brake.",
+        "clientSubmissionTimestamp": "10/04/2025, 05:57 pm",
+        "serverTimestamp": "10/04/2025, 05:57 PM",
+        "ipAddress": "45.248.78.229"
+    },
+    {
+        "bus_number": "2409",
+        "route_number": "930",
+        "destination": "Elizabeth Quay",
+        "start_latitude": "-32.023134",
+        "start_longitude": "115.939171",
+        "start_timestamp": "11/04/2025, 06:00 am",
+        "overall_experience": [
+            {
+                "value": "4",
+                "text": "Bad"
+            }
+        ],
+        "braking_quality": [
+            {
+                "value": "2",
+                "text": "Jerky"
+            }
+        ],
+        "acceleration_quality": [
+            {
+                "value": "5",
+                "text": "Average"
+            }
+        ],
+        "cleanliness": [
+            {
+                "value": "4",
+                "text": "Average"
+            }
+        ],
+        "driver_conduct": [
+            {
+                "value": "5",
+                "text": "Polite"
+            }
+        ],
+        "comments": "Braking wasn't smooth ",
+        "clientSubmissionTimestamp": "11/04/2025, 06:00 am",
+        "serverTimestamp": "11/04/2025, 06:00 AM",
+        "ipAddress": "45.248.78.27"
+    },
+    {
+        "bus_number": "2875",
+        "route_number": "27",
+        "destination": "Claremont Station",
+        "start_latitude": "-31.956063",
+        "start_longitude": "115.861132",
+        "start_timestamp": "11/04/2025, 07:14 am",
+        "overall_experience": [
+            {
+                "value": "8",
+                "text": "Best ever"
+            }
+        ],
+        "braking_quality": [
+            {
+                "value": "8",
+                "text": "Smooth"
+            }
+        ],
+        "acceleration_quality": [
+            {
+                "value": "6",
+                "text": "Smooth"
+            },
+            {
+                "value": "8",
+                "text": "Patient"
+            }
+        ],
+        "cornering_quality": [
+            {
+                "value": "6",
+                "text": "Very Good"
+            }
+        ],
+        "driver_conduct": [
+            {
+                "value": "5",
+                "text": "Polite"
+            },
+            {
+                "value": "6",
+                "text": "Friendly"
+            },
+            {
+                "value": "7",
+                "text": "Helpful"
+            }
+        ],
+        "passenger_conduct": [
+            {
+                "value": "6",
+                "text": "Considerate"
+            },
+            {
+                "value": "8",
+                "text": "Quiet"
+            }
+        ],
+        "comments": "The best driver I've had. Very smooth braking and acceleration. A pleasurable experience.",
+        "clientSubmissionTimestamp": "11/04/2025, 07:24 am",
+        "serverTimestamp": "11/04/2025, 07:24 AM",
+        "ipAddress": "45.248.78.27"
+    },
+    {
+        "bus_number": "2500",
+        "route_number": "930",
+        "destination": "Elizabeth Quay",
+        "start_latitude": "-31.968246",
+        "start_longitude": "115.889121",
+        "start_timestamp": "14/04/2025, 06:38 am",
+        "overall_experience": [
+            {
+                "value": "4",
+                "text": "Poor"
+            }
+        ],
+        "braking_quality": [
+            {
+                "value": "2",
+                "text": "Jerky"
+            },
+            {
+                "value": "5",
+                "text": "Average"
+            }
+        ],
+        "acceleration_quality": [
+            {
+                "value": "6",
+                "text": "Smooth"
+            }
+        ],
+        "cornering_quality": [
+            {
+                "value": "4",
+                "text": "Average"
+            }
+        ],
+        "cleanliness": [
+            {
+                "value": "4",
+                "text": "Average"
+            },
+            {
+                "value": "5",
+                "text": "Clean"
+            }
+        ],
+        "driver_conduct": [
+            {
+                "value": "5",
+                "text": "Polite"
+            }
+        ],
+        "passenger_conduct": [
+            {
+                "value": "6",
+                "text": "Considerate"
+            },
+            {
+                "value": "7",
+                "text": "Average"
+            },
+            {
+                "value": "8",
+                "text": "Quiet"
+            }
+        ],
+        "comments": "Pumping brakes when stopping rather than braking smoothly ",
+        "clientSubmissionTimestamp": "14/04/2025, 06:39 am",
+        "serverTimestamp": "14/04/2025, 06:39 AM",
+        "ipAddress": "45.248.78.29"
+    },
+    {
+        "bus_number": "3076",
+        "route_number": "27",
+        "destination": "Claremont Station",
+        "start_latitude": "-31.950471",
+        "start_longitude": "115.825169",
+        "start_timestamp": "14/04/2025, 07:11 am",
+        "overall_experience": [
+            {
+                "value": "6",
+                "text": "Good"
+            }
+        ],
+        "braking_quality": [
+            {
+                "value": "5",
+                "text": "Average"
+            },
+            {
+                "value": "6",
+                "text": "Good"
+            }
+        ],
+        "acceleration_quality": [
+            {
+                "value": "6",
+                "text": "Smooth"
+            }
+        ],
+        "cleanliness": [
+            {
+                "value": "4",
+                "text": "Average"
+            }
+        ],
+        "driver_conduct": [
+            {
+                "value": "4",
+                "text": "Average"
+            }
+        ],
+        "passenger_conduct": [
+            {
+                "value": "7",
+                "text": "Average"
+            },
+            {
+                "value": "8",
+                "text": "Quiet"
+            }
+        ],
+        "clientSubmissionTimestamp": "14/04/2025, 07:12 am",
+        "serverTimestamp": "14/04/2025, 07:12 AM",
+        "ipAddress": "45.248.78.29"
+    },
+    {
+        "bus_number": "2885",
+        "route_number": "27",
+        "destination": "East Perth",
+        "start_latitude": "-31.950381",
+        "start_longitude": "115.823330",
+        "start_timestamp": "14/04/2025, 03:57 pm",
+        "overall_experience": [
+            {
+                "value": "4",
+                "text": "Poor"
+            }
+        ],
+        "braking_quality": [
+            {
+                "value": "1",
+                "text": "No Feathering"
+            },
+            {
+                "value": "2",
+                "text": "Jerky"
+            }
+        ],
+        "acceleration_quality": [
+            {
+                "value": "5",
+                "text": "Average"
+            }
+        ],
+        "cornering_quality": [
+            {
+                "value": "4",
+                "text": "Average"
+            }
+        ],
+        "cleanliness": [
+            {
+                "value": "4",
+                "text": "Average"
+            }
+        ],
+        "driver_conduct": [
+            {
+                "value": "6",
+                "text": "Friendly"
+            }
+        ],
+        "passenger_conduct": [
+            {
+                "value": "7",
+                "text": "Average"
+            },
+            {
+                "value": "8",
+                "text": "Quiet"
+            }
+        ],
+        "clientSubmissionTimestamp": "14/04/2025, 03:59 pm",
+        "serverTimestamp": "14/04/2025, 03:59 PM",
+        "ipAddress": "45.248.78.29"
+    },
+    {
+        "bus_number": "2403",
+        "route_number": "230",
+        "destination": "Thornlie Station",
+        "start_latitude": "-31.993473",
+        "start_longitude": "115.913107",
+        "start_timestamp": "14/04/2025, 04:44 pm",
+        "overall_experience": [
+            {
+                "value": "4",
+                "text": "Poor"
+            }
+        ],
+        "braking_quality": [
+            {
+                "value": "2",
+                "text": "Jerky"
+            },
+            {
+                "value": "3",
+                "text": "Hard"
+            }
+        ],
+        "acceleration_quality": [
+            {
+                "value": "4",
+                "text": "Jerky"
+            }
+        ],
+        "driver_conduct": [
+            {
+                "value": "5",
+                "text": "Polite"
+            }
+        ],
+        "passenger_conduct": [
+            {
+                "value": "6",
+                "text": "Considerate"
+            },
+            {
+                "value": "7",
+                "text": "Average"
+            },
+            {
+                "value": "8",
+                "text": "Quiet"
+            }
+        ],
+        "clientSubmissionTimestamp": "14/04/2025, 04:44 pm",
+        "serverTimestamp": "14/04/2025, 04:44 PM",
+        "ipAddress": "45.248.78.29"
+    },
+    {
+        "bus_number": "2461",
+        "route_number": "930",
+        "destination": "Elizabeth Quay",
+        "start_latitude": "-32.016043",
+        "start_longitude": "115.932901",
+        "start_timestamp": "15/04/2025, 06:03 am",
+        "overall_experience": [
+            {
+                "value": "3",
+                "text": "Bad"
+            }
+        ],
+        "braking_quality": [
+            {
+                "value": "1",
+                "text": "No Feathering"
+            },
+            {
+                "value": "2",
+                "text": "Jerky"
+            }
+        ],
+        "acceleration_quality": [
+            {
+                "value": "4",
+                "text": "Jerky"
+            }
+        ],
+        "cornering_quality": [
+            {
+                "value": "4",
+                "text": "Average"
+            }
+        ],
+        "cleanliness": [
+            {
+                "value": "4",
+                "text": "Average"
+            }
+        ],
+        "driver_conduct": [
+            {
+                "value": "5",
+                "text": "Polite"
+            }
+        ],
+        "passenger_conduct": [
+            {
+                "value": "3",
+                "text": "Loud or Inconsiderate"
+            }
+        ],
+        "clientSubmissionTimestamp": "15/04/2025, 06:03 am",
+        "serverTimestamp": "15/04/2025, 06:03 AM",
+        "ipAddress": "45.248.78.13"
+    },
+    {
+        "bus_number": "2461",
+        "route_number": "930",
+        "destination": "Elizabeth Quay",
+        "start_latitude": "-31.979192",
+        "start_longitude": "115.903890",
+        "start_timestamp": "15/04/2025, 06:13 am",
+        "overall_experience": [
+            {
+                "value": "2",
+                "text": "Very Bad"
+            }
+        ],
+        "braking_quality": [
+            {
+                "value": "1",
+                "text": "No Feathering"
+            },
+            {
+                "value": "2",
+                "text": "Jerky"
+            }
+        ],
+        "comments": "What a terrible ride it made me feel sick.",
+        "clientSubmissionTimestamp": "15/04/2025, 06:14 am",
+        "serverTimestamp": "15/04/2025, 06:14 AM",
+        "ipAddress": "45.248.78.13"
+    },
+    {
+        "bus_number": "2835",
+        "route_number": "27",
+        "destination": "East Perth",
+        "start_latitude": "-31.950339",
+        "start_longitude": "115.823633",
+        "start_timestamp": "15/04/2025, 03:58 pm",
+        "overall_experience": [
+            {
+                "value": "5",
+                "text": "Average"
+            }
+        ],
+        "braking_quality": [
+            {
+                "value": "1",
+                "text": "No Feathering"
+            }
+        ],
+        "acceleration_quality": [
+            {
+                "value": "6",
+                "text": "Smooth"
+            }
+        ],
+        "clientSubmissionTimestamp": "15/04/2025, 03:58 pm",
+        "serverTimestamp": "15/04/2025, 03:59 PM",
+        "ipAddress": "45.248.78.13"
+    },
+    {
+        "bus_number": "2410",
+        "route_number": "230",
+        "destination": "Thornlie Station",
+        "start_latitude": "-32.014978",
+        "start_longitude": "115.929137",
+        "start_timestamp": "15/04/2025, 04:51 pm",
+        "overall_experience": [
+            {
+                "value": "4",
+                "text": "Poor"
+            }
+        ],
+        "braking_quality": [
+            {
+                "value": "1",
+                "text": "No Feathering"
+            },
+            {
+                "value": "2",
+                "text": "Jerky"
+            },
+            {
+                "value": "3",
+                "text": "Hard"
+            }
+        ],
+        "acceleration_quality": [
+            {
+                "value": "5",
+                "text": "Average"
+            }
+        ],
+        "passenger_conduct": [
+            {
+                "value": "8",
+                "text": "Quiet"
+            }
+        ],
+        "comments": "The fan was turned on too hard",
+        "clientSubmissionTimestamp": "15/04/2025, 04:51 pm",
+        "serverTimestamp": "15/04/2025, 04:51 PM",
+        "ipAddress": "162.247.72.193"
+    },
+    {
+        "bus_number": "2886",
+        "route_number": "27",
+        "destination": "East Perth",
+        "start_latitude": "-31.950278",
+        "start_longitude": "115.816654",
+        "start_timestamp": "16/04/2025, 03:55 pm",
+        "overall_experience": [
+            {
+                "value": "3",
+                "text": "Bad"
+            }
+        ],
+        "braking_quality": [
+            {
+                "value": "1",
+                "text": "No Feathering"
+            },
+            {
+                "value": "2",
+                "text": "Jerky"
+            },
+            {
+                "value": "3",
+                "text": "Hard"
+            }
+        ],
+        "comments": "Whiplash and absolutely no feathering at all. Felt sick.",
+        "clientSubmissionTimestamp": "16/04/2025, 03:56 pm",
+        "serverTimestamp": "16/04/2025, 03:56 PM",
+        "ipAddress": "103.107.197.94"
+    },
+    {
+        "bus_number": "2886",
+        "route_number": "27",
+        "destination": "East Perth",
+        "start_latitude": "-31.950362",
+        "start_longitude": "115.833133",
+        "start_timestamp": "16/04/2025, 04:02 pm",
+        "overall_experience": [
+            {
+                "value": "1",
+                "text": "Worst ever"
+            }
+        ],
+        "braking_quality": [
+            {
+                "value": "1",
+                "text": "No Feathering"
+            },
+            {
+                "value": "2",
+                "text": "Jerky"
+            },
+            {
+                "value": "3",
+                "text": "Hard"
+            }
+        ],
+        "comments": "Update. This female driver is shockingly bad. The breaking is the worst ever. ",
+        "clientSubmissionTimestamp": "16/04/2025, 04:03 pm",
+        "serverTimestamp": "16/04/2025, 04:03 PM",
+        "ipAddress": "103.107.197.94"
+    },
+    {
+        "bus_number": "3441",
+        "route_number": "930",
+        "destination": "Elizabeth Quay",
+        "start_latitude": "-32.027552",
+        "start_longitude": "115.944642",
+        "start_timestamp": "17/04/2025, 06:12 am",
+        "overall_experience": [
+            {
+                "value": "3",
+                "text": "Bad"
+            }
+        ],
+        "braking_quality": [
+            {
+                "value": "1",
+                "text": "No Feathering"
+            },
+            {
+                "value": "3",
+                "text": "Hard"
+            }
+        ],
+        "comments": "Absolutely no feathering ",
+        "clientSubmissionTimestamp": "17/04/2025, 06:13 am",
+        "serverTimestamp": "17/04/2025, 06:13 AM",
+        "ipAddress": "103.107.197.94"
+    },
+    {
+        "bus_number": "2846",
+        "route_number": "27",
+        "destination": "East Perth",
+        "start_latitude": "-31.950482",
+        "start_longitude": "115.819560",
+        "start_timestamp": "17/04/2025, 04:28 pm",
+        "overall_experience": [
+            {
+                "value": "4",
+                "text": "Poor"
+            }
+        ],
+        "braking_quality": [
+            {
+                "value": "1",
+                "text": "No Feathering"
+            }
+        ],
+        "clientSubmissionTimestamp": "17/04/2025, 04:28 pm",
+        "serverTimestamp": "17/04/2025, 04:28 PM",
+        "ipAddress": "103.107.197.94"
+    }
+]

@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="Transperth, Bus, Perth, Swan Transit">
+    <meta name="description" content="Rate and report your Transperth public bus ride in Perth">
+    <title>Ride Rate - Rate & Report Your TransPerth Bus Ride</title>
+    <style>
+        :root {
+            --bg-color: #1a1a1a;
+            --text-color: #e0e0e0;
+            --card-bg: #2c2c2c;
+            --border-color: #444;
+            --input-bg: #333;
+            --input-text: #e0e0e0;
+            --button-bg: #007bff;
+            --button-text: #ffffff;
+            --button-hover-bg: #0056b3;
+            --button-secondary-bg: #555;
+            --button-secondary-hover-bg: #777;
+            --button-thirdly-bg: #097969;
+            --button-thirdly-hover-bg: #555;
+            --rating-active-bg: #007bff;
+            --rating-active-text: #fff;
+            --rating-inactive-bg: #444;
+            --rating-inactive-text: #ccc;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { height: 100%; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; }
+        body { display: flex; flex-direction: column; align-items: center; padding: 5px 15px 15px 15px; background-color: var(--bg-color); color: var(--text-color); }
+        .container { width: 100%; max-width: 600px; margin: 10px auto; padding: 0px 20px 20px 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); background-color: var(--card-bg); border: 1px solid var(--border-color); }
+        header { text-align: center; margin-bottom: 5px; }
+        h1 { font-size: 2.0em; margin: -10px 0px 0px 0px; }
+        h1 span { display: block; font-weight: normal; font-size: 0.45em; margin: -8px 0px 0px 0px; }
+        h1 icon {font-weight: normal; font-size: 1.4em; margin: -8px 0px 0px 0px; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 1px; font-weight: bold; font-size: 0.95em; }
+        input[type="text"], input[type="email"], input[type="tel"], textarea, select {
+            width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 5px; font-size: 1em; background-color: var(--input-bg); color: var(--input-text);
+        }
+        textarea { min-height: 100px; resize: vertical; font-size:15px; }
+        .autocomplete-container .autocomplete-list {background:#333;border: 1px solid #cccccc;}
+        button { padding: 12px 20px; font-size: 1em; font-weight: bold; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.2s ease; margin-right: 5px; margin-bottom: 5px; }
+        button.primary { background-color: var(--button-bg); color: var(--button-text); width: 100%; margin-top: 10px; }
+        button.primary:hover { background-color: var(--button-hover-bg); }
+        button.secondary { background-color: var(--button-secondary-bg); color: var(--button-text); padding: 8px 12px; font-size: 0.9em; }
+        button.secondary:hover { background-color: var(--button-secondary-hover-bg); }
+        
+        button.thirdly { background-color: var(--button-thirdly-bg); color: var(--button-text); padding: 8px 12px; font-size: 0.9em; border:none;}
+        button.thirdly:hover { background-color: var(--button-thirdly-hover-bg); color: var(--button-text)}
+        
+        button.full-width { width: 100%; }
+        #get-start-location-btn {
+            background-color: #17a2b8;
+            color: #ffffff;
+            border: 1px solid #117a8b;
+            padding: 12px 20px;
+            font-size: 1em;
+            border-radius: 8px;
+        }
+        #get-start-location-btn:hover {
+            background-color: #138496;
+            border-color: #0c5460;
+        }
+        .location-group { display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px; }
+        .location-group span { font-size: 0.9em; min-height: 20px; }
+        #start-location-display {
+            display: none;
+        }
+        #start-location-display.visible {
+            display: block;
+        }
+        .rating-group { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+        .rating-group button { padding: 10px; font-size: 0.9em; text-align: center; border: 1px solid var(--border-color); background-color: var(--rating-inactive-bg); color: var(--rating-inactive-text); }
+        .rating-group button.active { background-color: var(--rating-active-bg); color: var(--rating-active-text); border-color: var(--rating-active-bg); font-weight: bold; }
+        .rating-section.spare { display: none; }
+        #confirmation-message { margin-top: 20px; padding: 15px; border-radius: 5px; display: none; white-space: pre-wrap; word-wrap: break-word; font-size: 0.9em; border: 1px solid var(--border-color); background-color: var(--input-bg); color: var(--input-text); }
+        .button-group { display: flex; gap: 8px; }
+        .button-group button { flex: 1; padding: 10px; font-size: 0.9em; text-align: center; border: 0px solid var(--border-color); font-weight: bold; }
+        .help-link { font-size: 0.8em; color: var(--button-bg); cursor: pointer; text-decoration: underline; }
+        .help-link:hover { color: var(--button-hover-bg); }
+        .autocomplete-container { position: relative; }
+        .autocomplete-list {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+        }
+        .autocomplete-list li {
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .autocomplete-list li:last-child { border-bottom: none; }
+        .autocomplete-list li:hover { background-color: var(--button-secondary-bg); }
+        .disclaimer {font-size:12px;text-align:center;margin-top:10px; color:#777;}
+    .disclaimer a {color:#999;text-decoration:none;}
+        
+@media (max-width: 768px) {
+        h1 span {font-size: 0.40em;}
+                .disclaimer {font-size:10px;text-align:center;margin-top:10px; color:#777;}
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Rate My Ride <icon>🚌</icon><span>Rate & Report Your Transperth Bus Ride</span></h1>
+            <link rel="icon" type="image/x-icon" href="https://sandgroper.net/bus/bus-icon.png">
+        </header>
+        <main>
+            <form id="rating-form">
+                <section class="form-group">
+                    <label for="bus-number">Bus Number</label>
+                    <input type="text" id="bus-number" name="bus_number" placeholder="e.g., 1303" inputmode="numeric">
+                </section>
+                <section class="form-group">
+                    <label for="route-number">Route Number*</label>
+                    <div class="autocomplete-container">
+                        <input type="text" id="route-number" name="route_number" placeholder="Type then choose a route" required>
+                        <input type="hidden" id="route-number-hidden" name="route_number_hidden">
+                        <ul id="route-autocomplete" class="autocomplete-list"></ul>
+                    </div>
+                </section>
+                <section class="form-group">
+                    <label for="destination">Destination*</label>
+                    <select id="destination" name="destination" required>
+                        <option value="">Going to...</option>
+                    </select>
+                </section>
+                <section class="form-group">
+                    <label for="start-point">Time & Location*</label>
+                    <div class="location-group">
+                        <button type="button" id="get-start-location-btn" class="secondary full-width">Get Time & Location</button>
+                        <span id="start-location-display"></span>
+                    </div>
+                    <input type="hidden" id="start-latitude" name="start_latitude">
+                    <input type="hidden" id="start-longitude" name="start_longitude">
+                    <input type="hidden" id="start-timestamp" name="start_timestamp">
+                </section>
+                <section class="form-group rating-section required-rating" data-rating-name="overall_experience">
+                    <label>Overall Experience*</label>
+                    <div class="rating-group">
+                        <button type="button" data-value="1">Worst ever</button>
+                        <button type="button" data-value="2">Very Bad</button>
+                        <button type="button" data-value="3">Bad</button>
+                        <button type="button" data-value="4">Poor</button>
+                        <button type="button" data-value="5">Average</button>
+                        <button type="button" data-value="6">Good</button>
+                        <button type="button" data-value="7">Very Good</button>
+                        <button type="button" data-value="8">Best ever</button>
+                    </div>
+                    <input type="hidden" name="overall_experience" class="rating-value">
+                </section>
+                <section class="form-group rating-section" data-rating-name="braking_quality">
+                    <label>Braking</label>
+                    <div class="rating-group">
+                        <button type="button" data-value="1">No Feathering</button>
+                        <button type="button" data-value="2">Jerky</button>
+                        <button type="button" data-value="3">Hard</button>
+                        <button type="button" data-value="4">Tailgating</button>
+                        <button type="button" data-value="5">Average</button>
+                        <button type="button" data-value="6">Good</button>
+                        <button type="button" data-value="7">Gentle</button>
+                        <button type="button" data-value="8">Smooth</button>
+                    </div>
+                    <input type="hidden" name="braking_quality" class="rating-value">
+                </section>
+                <section class="form-group rating-section" data-rating-name="acceleration_quality">
+                    <label>Acceleration</label>
+                    <div class="rating-group">
+                        <button type="button" data-value="1">Dangerous</button>
+                        <button type="button" data-value="2">Hard</button>
+                        <button type="button" data-value="3">Fast</button>
+                        <button type="button" data-value="4">Jerky</button>
+                        <button type="button" data-value="5">Average</button>
+                        <button type="button" data-value="6">Smooth</button>
+                        <button type="button" data-value="7">Waited</button>
+                        <button type="button" data-value="8">Patient</button>
+                    </div>
+                    <input type="hidden" name="acceleration_quality" class="rating-value">
+                </section>
+                <section class="form-group rating-section" data-rating-name="cornering_quality">
+                    <label>Cornering</label>
+                    <div class="rating-group">
+                        <button type="button" data-value="1">Too Fast</button>
+                        <button type="button" data-value="2">Hitting Kerbs</button>
+                        <button type="button" data-value="3">Hard Braking</button>
+                        <button type="button" data-value="4">Average</button>
+                        <button type="button" data-value="5">Smooth</button>
+                        <button type="button" data-value="6">Very Good</button>
+                    </div>
+                    <input type="hidden" name="cornering_quality" class="rating-value">
+                </section>
+                <section class="form-group rating-section" data-rating-name="cleanliness">
+                    <label>Environment</label>
+                    <div class="rating-group">
+                        <button type="button" data-value="1">Too Cold</button>
+                        <button type="button" data-value="2">Too Hot</button>
+                        <button type="button" data-value="3">Wet Floor</button>
+                        <button type="button" data-value="4">Average</button>
+                        <button type="button" data-value="5">Clean</button>
+                        <button type="button" data-value="6">Dry</button>
+                    </div>
+                    <input type="hidden" name="cleanliness" class="rating-value">
+                </section>
+                <section class="form-group rating-section spare" data-rating-name="crowdedness">
+                    <label>Crowdedness</label>
+                    <div class="rating-group">
+                        <button type="button" data-value="1">Empty</button>
+                        <button type="button" data-value="2">Sparse</button>
+                        <button type="button" data-value="3">Light</button>
+                        <button type="button" data-value="4">Moderate</button>
+                        <button type="button" data-value="5">Busy</button>
+                        <button type="button" data-value="6">Crowded</button>
+                        <button type="button" data-value="7">Packed</button>
+                        <button type="button" data-value="8">Overcrowded</button>
+                    </div>
+                    <input type="hidden" name="crowdedness" class="rating-value">
+                </section>
+                <section class="form-group rating-section" data-rating-name="driver_conduct">
+                    <label>Driver Conduct</label>
+                    <div class="rating-group">
+                        <button type="button" data-value="1">Rude</button>
+                        <button type="button" data-value="2">Unpleasant</button>
+                        <button type="button" data-value="3">Neutral</button>
+                        <button type="button" data-value="4">Average</button>
+                        <button type="button" data-value="5">Polite</button>
+                        <button type="button" data-value="6">Friendly</button>
+                        <button type="button" data-value="7">Helpful</button>
+                        <button type="button" data-value="8">Outstanding</button>
+                    </div>
+                    <input type="hidden" name="driver_conduct" class="rating-value">
+                </section>
+                <section class="form-group rating-section" data-rating-name="passenger_conduct">
+                    <label>Passenger Conduct</label>
+                    <div class="rating-group">
+                        <button type="button" data-value="1">Violent or Aggressive</button>
+                        <button type="button" data-value="2">Rude or Abusive</button>
+                        <button type="button" data-value="3">Loud or Inconsiderate</button>
+                        <button type="button" data-value="4">Seat Hogging </button>
+                        <button type="button" data-value="5">Helpful</button>
+                        <button type="button" data-value="6">Considerate</button>
+                        <button type="button" data-value="7">Average</button>
+                        <button type="button" data-value="8">Quiet</button>
+                    </div>
+                    <input type="hidden" name="passenger_conduct" class="rating-value">
+                </section>
+                <section class="form-group rating-section spare" data-rating-name="spare_2">
+                    <label>Spare 2</label>
+                    <div class="rating-group">
+                        <button type="button" data-value="1">Option 1</button>
+                        <button type="button" data-value="2">Option 2</button>
+                        <button type="button" data-value="3">Option 3</button>
+                        <button type="button" data-value="4">Option 4</button>
+                        <button type="button" data-value="5">Option 5</button>
+                        <button type="button" data-value="6">Option 6</button>
+                        <button type="button" data-value="7">Option 7</button>
+                        <button type="button" data-value="8">Option 8</button>
+                    </div>
+                    <input type="hidden" name="spare_2" class="rating-value">
+                </section>
+                <section class="form-group rating-section spare" data-rating-name="spare_3">
+                    <label>Spare 3</label>
+                    <div class="rating-group">
+                        <button type="button" data-value="1">Option 1</button>
+                        <button type="button" data-value="2">Option 2</button>
+                        <button type="button" data-value="3">Option 3</button>
+                        <button type="button" data-value="4">Option 4</button>
+                        <button type="button" data-value="5">Option 5</button>
+                        <button type="button" data-value="6">Option 6</button>
+                        <button type="button" data-value="7">Option 7</button>
+                        <button type="button" data-value="8">Option 8</button>
+                    </div>
+                    <input type="hidden" name="spare_3" class="rating-value">
+                </section>
+                <section class="form-group rating-section spare" data-rating-name="spare_4">
+                    <label>Spare 4</label>
+                    <div class="rating-group">
+                        <button type="button" data-value="1">Option 1</button>
+                        <button type="button" data-value="2">Option 2</button>
+                        <button type="button" data-value="3">Option 3</button>
+                        <button type="button" data-value="4">Option 4</button>
+                        <button type="button" data-value="5">Option 5</button>
+                        <button type="button" data-value="6">Option 6</button>
+                        <button type="button" data-value="7">Option 7</button>
+                        <button type="button" data-value="8">Option 8</button>
+                    </div>
+                    <input type="hidden" name="spare_4" class="rating-value">
+                </section>
+                <section class="form-group">
+                    <label for="comments">Additional Comments</label>
+                    <textarea id="comments" name="comments" placeholder="Any other feedback..." maxlength="500"></textarea>
+                    <div id="char-counter" style="font-size: 0.9em; color: var(--text-color); margin-top: 5px;">500 characters remaining</div>
+                </section>
+                <!-- <section class="form-group">
+                    <label for="user-name">Your Name (Optional)</label>
+                    <input type="text" id="user-name" name="user_name" placeholder="e.g., John Doe">
+                </section>
+                <section class="form-group">
+                    <label for="user-phone">Your Phone (Optional)</label>
+                    <input type="tel" id="user-phone" name="user_phone" placeholder="e.g., 0412345678" inputmode="numeric">
+                </section> -->
+                <div class="button-group">
+                    <button type="button" id="reset-form-btn" class="secondary">Reset</button>
+                    <button type="button" id="see-results-btn" class="thirdly" onclick="window.location.href='view_ratings.php'">See Results</button>
+                </div>
+                <button type="submit" class="primary">Submit Rating</button>
+            </form>
+            <div id="confirmation-message"></div>
+            <p class="disclaimer">not affillated with/endorsed by Transperth<br /><br /><br /><a href="privacy.html" target="_blank">Privacy</a> &bull; <a href="terms.html" target="_blank">Terms</a> &bull; <a href="faq.html" target="_blank">FAQs</a> &bull; <a href="https://sandgroper.net" target="_blank">Apps</a></p>
+        </main>
+    </div>
+<script type="module">
+    import { routeData } from './routeData.js';
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const ratingForm = document.getElementById('rating-form');
+        const resetFormBtn = document.getElementById('reset-form-btn');
+        const getStartLocationBtn = document.getElementById('get-start-location-btn');
+        const startLocationDisplay = document.getElementById('start-location-display');
+        const startLatInput = document.getElementById('start-latitude');
+        const startLonInput = document.getElementById('start-longitude');
+        const startTimestampInput = document.getElementById('start-timestamp');
+        const confirmationMessage = document.getElementById('confirmation-message');
+        const busNumberInput = document.getElementById('bus-number');
+        const routeInput = document.getElementById('route-number');
+        const routeHiddenInput = document.getElementById('route-number-hidden');
+        const routeAutocomplete = document.getElementById('route-autocomplete');
+        const destinationSelect = document.getElementById('destination');
+        const userPhoneInput = document.getElementById('user-phone');
+        const commentsTextarea = document.getElementById('comments');
+        const charCounter = document.getElementById('char-counter');
+        const maxChars = 100; // Character limit for comments
+
+        // Update character counter on page load
+        charCounter.textContent = `${maxChars} characters remaining`;
+
+        // Update character counter as user types
+        commentsTextarea.addEventListener('input', () => {
+            const remaining = maxChars - commentsTextarea.value.length;
+            charCounter.textContent = `${remaining} characters remaining`;
+            if (remaining < 10) {
+                charCounter.style.color = 'red';
+            } else {
+                charCounter.style.color = 'var(--text-color)';
+            }
+        });
+
+        // Cookie functions for submission limiting
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+            return null;
+        }
+
+        function setCookie(name, value, hours) {
+            const date = new Date();
+            date.setTime(date.getTime() + (hours * 60 * 60 * 1000));
+            const expires = `expires=${date.toUTCString()}`;
+            document.cookie = `${name}=${value};${expires};path=/`;
+        }
+
+        function checkSubmissionLimit() {
+            const submissions = getCookie('submissions');
+            const timestamp = getCookie('firstSubmissionTime');
+            const now = Date.now();
+            const twelveHours = 12 * 60 * 60 * 1000;
+
+            if (!submissions || !timestamp || (now - parseInt(timestamp) > twelveHours)) {
+                setCookie('submissions', '1', 12);
+                setCookie('firstSubmissionTime', now, 12);
+                return true;
+            } else {
+                const count = parseInt(submissions);
+                if (count < 5) {
+                    setCookie('submissions', count + 1, 12);
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }
+
+        // Autocomplete functionality
+        function updateAutocomplete(value) {
+            routeAutocomplete.innerHTML = '';
+            const filteredRoutes = Object.keys(routeData).filter(route =>
+                route.toLowerCase().includes(value.toLowerCase())
+            ).slice(0, 10);
+            if (filteredRoutes.length > 0 && value) {
+                filteredRoutes.forEach(route => {
+                    const li = document.createElement('li');
+                    li.textContent = route;
+                    li.addEventListener('click', () => {
+                        routeInput.value = route;
+                        routeHiddenInput.value = route;
+                        updateDestination(route);
+                        routeAutocomplete.style.display = 'none';
+                    });
+                    routeAutocomplete.appendChild(li);
+                });
+                routeAutocomplete.style.display = 'block';
+            } else {
+                routeAutocomplete.style.display = 'none';
+            }
+        }
+
+        function updateDestination(selectedRoute) {
+            destinationSelect.innerHTML = '<option value="">Going to...</option>';
+            if (selectedRoute && routeData[selectedRoute]) {
+                const { from, to } = routeData[selectedRoute];
+                const fromOption = document.createElement('option');
+                fromOption.value = from;
+                fromOption.textContent = from;
+                destinationSelect.appendChild(fromOption);
+                if (to) {
+                    const toOption = document.createElement('option');
+                    toOption.value = to;
+                    toOption.textContent = to;
+                    destinationSelect.appendChild(toOption);
+                }
+            }
+        }
+
+        routeInput.addEventListener('input', (e) => updateAutocomplete(e.target.value));
+        routeInput.addEventListener('focus', () => updateAutocomplete(routeInput.value || ''));
+        routeInput.addEventListener('blur', () => {
+            setTimeout(() => {
+                routeAutocomplete.style.display = 'none';
+                if (routeData[routeInput.value]) {
+                    routeHiddenInput.value = routeInput.value;
+                    updateDestination(routeInput.value);
+                } else {
+                    routeInput.value = routeHiddenInput.value || '';
+                    updateDestination(routeHiddenInput.value);
+                }
+            }, 200);
+        });
+
+        [busNumberInput/* , userPhoneInput */].forEach(input => {
+            input.addEventListener('input', (e) => e.target.value = e.target.value.replace(/[^0-9]/g, ''));
+            input.addEventListener('paste', (e) => {
+                const pastedData = (e.clipboardData || window.clipboardData).getData('text');
+                if (!/^[0-9]*$/.test(pastedData)) e.preventDefault();
+            });
+        });
+
+        function resetFormSilently() {
+            ratingForm.reset();
+            startLocationDisplay.textContent = '';
+            startLocationDisplay.classList.remove('visible');
+            document.querySelectorAll('.rating-group button.active').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.rating-value').forEach(input => input.value = '');
+            confirmationMessage.style.display = 'none';
+            confirmationMessage.textContent = '';
+            ratingForm.querySelectorAll('.error-highlight').forEach(el => el.classList.remove('error-highlight'));
+            ratingForm.querySelectorAll('input, textarea, select').forEach(el => el.style.borderColor = '');
+            ratingForm.querySelectorAll('.rating-section label').forEach(el => el.style.color = '');
+            ratingForm.querySelectorAll('.location-group').forEach(el => {
+                el.style.border = '';
+                el.style.padding = '';
+                el.style.borderRadius = '';
+            });
+            destinationSelect.innerHTML = '<option value="">Going to...</option>';
+            routeAutocomplete.style.display = 'none';
+            routeHiddenInput.value = '';
+            charCounter.textContent = `${maxChars} characters remaining`; // Reset counter
+            charCounter.style.color = 'var(--text-color)'; // Reset counter color
+        }
+
+        function formatTimestamp(ts) {
+            if (!ts) return '';
+            try {
+                const date = new Date(ts);
+                return isNaN(date.getTime()) ? ts : date.toLocaleString('en-AU', {
+                    timeZone: 'Australia/Perth',
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: true
+                });
+            } catch (e) { return ts; }
+        }
+
+        function handleLocation(button, display, latInput, lonInput, timestampInput) {
+            button.addEventListener('click', () => {
+                const awstDate = new Date().toLocaleString('en-AU', {
+                    timeZone: 'Australia/Perth',
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: true
+                });
+                timestampInput.value = awstDate;
+                display.innerHTML = `Date/Time: ${awstDate}<br />Lat: ---, Lon: ---`;
+                display.classList.add('visible');
+                if (!navigator.geolocation) {
+                    display.innerHTML = `Date/Time: ${awstDate}<br />Lat: ---, Lon: --- (Geolocation not supported)`;
+                    return;
+                }
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const lat = position.coords.latitude.toFixed(6);
+                        const lon = position.coords.longitude.toFixed(6);
+                        latInput.value = lat;
+                        lonInput.value = lon;
+                        display.innerHTML = `Date/Time: ${awstDate}<br />Lat: ${lat}, Lon: ${lon}`;
+                    },
+                    (error) => {
+                        let message = 'Lat: ---, Lon: --- (';
+                        switch (error.code) {
+                            case error.PERMISSION_DENIED: message += "Permission denied)"; break;
+                            case error.POSITION_UNAVAILABLE: message += "Location unavailable)"; break;
+                            case error.TIMEOUT: message += "Request timed out)"; break;
+                            default: message += "Unknown error)"; break;
+                        }
+                        display.innerHTML = `Date/Time: ${awstDate}<br />${message}`;
+                    },
+                    { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+                );
+            });
+        }
+
+        handleLocation(getStartLocationBtn, startLocationDisplay, startLatInput, startLonInput, startTimestampInput);
+
+        resetFormBtn.addEventListener('click', () => {
+            if (confirm("Are you sure you want to reset the form? All entered data will be lost.")) {
+                window.location.reload();
+            }
+        });
+
+        document.querySelectorAll('.rating-section').forEach(section => {
+            const buttons = section.querySelectorAll('.rating-group button');
+            const hiddenInput = section.querySelector('.rating-value');
+            const ratingName = section.dataset.ratingName;
+
+            if (ratingName === 'overall_experience') {
+                // Single-select for Overall Experience
+                buttons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        buttons.forEach(btn => btn.classList.remove('active'));
+                        button.classList.add('active');
+                        const selectedValue = [{ value: button.dataset.value, text: button.textContent.trim() }];
+                        hiddenInput.value = JSON.stringify(selectedValue);
+                        hiddenInput.name = ratingName;
+                    });
+                });
+            } else {
+                // Multi-select for other ratings
+                buttons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        button.classList.toggle('active');
+                        const selectedValues = Array.from(section.querySelectorAll('.rating-group button.active'))
+                            .map(btn => ({ value: btn.dataset.value, text: btn.textContent.trim() }));
+                        hiddenInput.value = JSON.stringify(selectedValues);
+                        hiddenInput.name = ratingName;
+                    });
+                });
+            }
+        });
+
+        ratingForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            confirmationMessage.style.display = 'none';
+            confirmationMessage.textContent = '';
+
+            if (!checkSubmissionLimit()) {
+                confirmationMessage.textContent = 'Submission limit reached: Maximum 5 submissions in 12 hours.';
+                confirmationMessage.style.color = 'red';
+                confirmationMessage.style.borderColor = 'red';
+                confirmationMessage.style.backgroundColor = '#401010';
+                confirmationMessage.style.display = 'block';
+                return;
+            }
+
+            let isValid = true;
+            ratingForm.querySelectorAll('.error-highlight').forEach(el => el.classList.remove('error-highlight'));
+            ratingForm.querySelectorAll('input, textarea, select').forEach(el => el.style.borderColor = '');
+            ratingForm.querySelectorAll('.rating-section label').forEach(el => el.style.color = '');
+            ratingForm.querySelectorAll('.location-group').forEach(el => {
+                el.style.border = '';
+                el.style.padding = '';
+                el.style.borderRadius = '';
+            });
+
+            const requiredFields = ratingForm.querySelectorAll('[required]');
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    isValid = false;
+                    field.style.borderColor = 'red';
+                    field.classList.add('error-highlight');
+                    const label = ratingForm.querySelector(`label[for="${field.id}"]`);
+                    if (label) { label.style.color = 'red'; label.classList.add('error-highlight'); }
+                }
+            });
+
+            if (!routeData[routeInput.value]) {
+                isValid = false;
+                routeInput.style.borderColor = 'red';
+                routeInput.classList.add('error-highlight');
+                const label = ratingForm.querySelector(`label[for="route-number"]`);
+                if (label) { label.style.color = 'red'; label.classList.add('error-highlight'); }
+            }
+
+            const startLocationGroup = getStartLocationBtn.parentElement;
+            if (!startLatInput.value || !startLonInput.value || !startTimestampInput.value ||
+                startLocationDisplay.textContent.includes('---')) {
+                isValid = false;
+                startLocationGroup.style.border = '1px solid red';
+                startLocationGroup.style.padding = '5px';
+                startLocationGroup.style.borderRadius = '4px';
+                const label = startLocationGroup.previousElementSibling;
+                if (label) { label.style.color = 'red'; label.classList.add('error-highlight'); }
+            }
+
+            document.querySelectorAll('.rating-section.required-rating').forEach(section => {
+                const hiddenInput = section.querySelector('.rating-value');
+                const label = section.querySelector('label');
+                if (!hiddenInput.value || JSON.parse(hiddenInput.value).length === 0) {
+                    isValid = false;
+                    label.style.color = 'red';
+                    label.classList.add('error-highlight');
+                    section.querySelector('.rating-group').style.border = '1px solid red';
+                    section.querySelector('.rating-group').style.padding = '5px';
+                    section.querySelector('.rating-group').style.borderRadius = '4px';
+                } else {
+                    section.querySelector('.rating-group').style.border = '';
+                    section.querySelector('.rating-group').style.padding = '';
+                    section.querySelector('.rating-group').style.borderRadius = '';
+                }
+            });
+
+            if (!isValid) {
+                confirmationMessage.textContent = 'Please fill in required fields, including Start location, Route, Destination, and correct invalid inputs (marked red).';
+                confirmationMessage.style.color = 'red';
+                confirmationMessage.style.borderColor = 'red';
+                confirmationMessage.style.backgroundColor = '#401010';
+                confirmationMessage.style.display = 'block';
+                return;
+            }
+
+            const formData = new FormData(ratingForm);
+            const ratingData = {};
+            formData.forEach((value, key) => {
+                if (value && key !== 'route_number_hidden') {
+                    const ratingInput = ratingForm.querySelector(`input[name="${key}"].rating-value`);
+                    if (ratingInput && value) {
+                        ratingData[key] = JSON.parse(value);
+                    } else {
+                        ratingData[key] = value;
+                    }
+                }
+            });
+
+            const perthDate = new Date().toLocaleString('en-AU', {
+                timeZone: 'Australia/Perth',
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true
+            });
+            ratingData.clientSubmissionTimestamp = perthDate;
+
+            const submitButton = ratingForm.querySelector('button[type="submit"]');
+            const originalButtonText = submitButton.textContent;
+            submitButton.textContent = 'Submitting...';
+            submitButton.disabled = true;
+
+            try {
+                const response = await fetch('log_rating.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(ratingData),
+                });
+                const result = await response.json();
+
+                if (response.ok && result.status === 'success') {
+                    confirmationMessage.textContent = 'Rating logged successfully! The form page will refresh shortly.';
+                    confirmationMessage.style.color = '#e0e0e0';
+                    confirmationMessage.style.borderColor = '#444';
+                    confirmationMessage.style.backgroundColor = '#103010';
+                    confirmationMessage.style.display = 'block';
+                    setTimeout(() => window.location.reload(), 1500);
+                } else {
+                    throw new Error(result.message || 'Could not submit rating.');
+                }
+            } catch (error) {
+                confirmationMessage.textContent = `Error: ${error.message}. Could not connect to server.`;
+                confirmationMessage.style.color = 'red';
+                confirmationMessage.style.borderColor = 'red';
+                confirmationMessage.style.backgroundColor = '#401010';
+                confirmationMessage.style.display = 'block';
+            } finally {
+                submitButton.textContent = originalButtonText;
+                submitButton.disabled = false;
+                confirmationMessage.scrollIntoView({ behavior: 'smooth', block: 'end' });
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
