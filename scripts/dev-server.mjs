@@ -10,6 +10,8 @@ const port = Number(process.env.PORT || 8765);
 const apiHandlers = {
   "/api/log_rating": () => import("../api/log_rating.js"),
   "/api/ratings": () => import("../api/ratings.js"),
+  "/api/admin_auth": () => import("../api/admin_auth.js"),
+  "/api/admin_ratings": () => import("../api/admin_ratings.js"),
 };
 
 const mime = {

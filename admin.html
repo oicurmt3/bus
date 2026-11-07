@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex,nofollow">
+    <title>Ride Rate — Admin</title>
+    <style>
+        :root {
+            --bg: #1e1e1e;
+            --card: #2c2c2c;
+            --text: #e8e8e8;
+            --muted: #aaa;
+            --border: #555;
+            --primary: #0d6efd;
+            --primary-hover: #0b5ed7;
+            --secondary: #6c757d;
+            --secondary-hover: #5c636a;
+            --destructive: #dc3545;
+            --destructive-hover: #bb2d3b;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            padding: 20px;
+        }
+        .wrap { max-width: 1100px; margin: 0 auto; }
+        h1 { font-size: 1.6rem; margin: 0 0 8px; }
+        p.lead { color: var(--muted); margin: 0 0 20px; }
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        label { display: block; margin-bottom: 6px; font-weight: 600; }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            background: #333;
+            color: var(--text);
+            margin-bottom: 12px;
+        }
+        button {
+            border: none;
+            border-radius: 6px;
+            padding: 10px 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-right: 8px;
+        }
+        button.primary { background: var(--primary); color: #fff; }
+        button.primary:hover { background: var(--primary-hover); }
+        button.secondary { background: var(--secondary); color: #fff; }
+        button.secondary:hover { background: var(--secondary-hover); }
+        button.destructive { background: var(--destructive); color: #fff; }
+        button.destructive:hover { background: var(--destructive-hover); }
+        .error { color: #ff6b6b; min-height: 1.2em; }
+        #status-line { min-height: 1.2em; margin-bottom: 12px; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+        th, td { border-bottom: 1px solid var(--border); padding: 10px 8px; text-align: left; vertical-align: top; }
+        th { color: #ffb74d; }
+        td.actions { white-space: nowrap; }
+        .toolbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 12px; }
+        dialog {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--card);
+            color: var(--text);
+            width: min(560px, 96vw);
+            padding: 20px;
+        }
+        dialog::backdrop { background: rgba(0,0,0,0.6); }
+        a { color: #6cb4ff; }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <h1>Ride Rate — Admin</h1>
+        <p class="lead">Edit or delete stored ratings. <a href="index.html">Back to public site</a></p>
+
+        <section id="login-panel" class="card">
+            <h2>Sign in</h2>
+            <form id="login-form">
+                <label for="admin-password">Admin password</label>
+                <input type="password" id="admin-password" name="password" autocomplete="current-password" required>
+                <button type="submit" class="primary">Sign in</button>
+            </form>
+            <p id="login-error" class="error"></p>
+        </section>
+
+        <section id="admin-panel" class="card" hidden>
+            <div class="toolbar">
+                <button type="button" id="refresh-btn" class="secondary">Refresh</button>
+                <button type="button" id="logout-btn" class="secondary">Sign out</button>
+            </div>
+            <p id="status-line"></p>
+            <div style="overflow-x:auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Bus</th>
+                            <th>Route</th>
+                            <th>Destination</th>
+                            <th>Date/Time</th>
+                            <th>Overall</th>
+                            <th>Comments</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-rows"></tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <dialog id="edit-dialog">
+        <form id="edit-form" method="dialog">
+            <h2>Edit rating</h2>
+            <label for="edit-bus">Bus number</label>
+            <input id="edit-bus" name="bus_number">
+            <label for="edit-route">Route</label>
+            <input id="edit-route" name="route_number" required>
+            <label for="edit-destination">Destination</label>
+            <input id="edit-destination" name="destination" required>
+            <label for="edit-timestamp">Start date/time</label>
+            <input id="edit-timestamp" name="start_timestamp">
+            <label for="edit-comments">Comments</label>
+            <textarea id="edit-comments" name="comments" rows="3"></textarea>
+            <label for="edit-overall">Overall experience (JSON array)</label>
+            <textarea id="edit-overall" name="overall_experience" rows="4" required></textarea>
+            <p id="edit-error" class="error"></p>
+            <button type="submit" class="primary">Save</button>
+            <button type="button" id="edit-cancel" class="secondary">Cancel</button>
+        </form>
+    </dialog>
+
+    <script type="module" src="js/admin-app.js"></script>
+</body>
+</html>

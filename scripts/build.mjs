@@ -8,6 +8,7 @@ const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const STATIC_FILES = [
   "index.html",
   "view_ratings.html",
+  "admin.html",
   "faq.html",
   "privacy.html",
   "terms.html",

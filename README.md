@@ -25,6 +25,10 @@ npm run build
 
 Runs SQL migrations when `DATABASE_URL` is set, then copies static assets and `js/` into `public/`.
 
+## Admin
+
+Open `/admin.html` on the deployed site. Set the `ADMIN_PASSWORD` secret in Cursor Publish settings before signing in.
+
 ## cPanel (sandgroper.net)
 
 Use the hardened PHP files under `cpanel/` (not shipped to Cursor hosting).
