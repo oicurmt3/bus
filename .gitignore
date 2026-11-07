@@ -1,0 +1,8 @@
+node_modules/
+bus_ratings.json
+bus_ratings.csv
+config*.php
+*.log
+error_log
+.env
+.env.*
