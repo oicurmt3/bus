@@ -688,7 +688,12 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(ratingData),
                 });
-                const result = await response.json();
+                let result = {};
+                try {
+                    result = await response.json();
+                } catch {
+                    result = {};
+                }
 
                 if (response.ok && result.status === 'success') {
                     confirmationMessage.textContent = 'Rating logged successfully! The form page will refresh shortly.';
@@ -698,10 +703,13 @@
                     confirmationMessage.style.display = 'block';
                     setTimeout(() => window.location.reload(), 1500);
                 } else {
-                    throw new Error(result.message || 'Could not submit rating.');
+                    const message = result.message || (response.status === 429
+                        ? 'Too many submissions. Please try again later.'
+                        : 'Could not submit rating.');
+                    throw new Error(message);
                 }
             } catch (error) {
-                confirmationMessage.textContent = `Error: ${error.message}. Could not connect to server.`;
+                confirmationMessage.textContent = `Error: ${error.message}`;
                 confirmationMessage.style.color = 'red';
                 confirmationMessage.style.borderColor = 'red';
                 confirmationMessage.style.backgroundColor = '#401010';

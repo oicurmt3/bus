@@ -2,7 +2,7 @@ import http from "node:http";
 import { createReadStream, existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { TRUSTED_CLIENT_IP_HEADER } from "../lib/http.js";
+import { DEV_CLIENT_IP_HEADER } from "../lib/http.js";
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const port = Number(process.env.PORT || 8765);
@@ -31,8 +31,9 @@ function webRequest(req) {
     if (lower === "x-forwarded-for" || lower === "x-real-ip") continue;
     headers.set(key, Array.isArray(value) ? value.join(", ") : String(value));
   }
+  headers.delete(DEV_CLIENT_IP_HEADER);
   const remote = req.socket?.remoteAddress?.replace(/^::ffff:/, "") || "127.0.0.1";
-  headers.set(TRUSTED_CLIENT_IP_HEADER, remote);
+  headers.set(DEV_CLIENT_IP_HEADER, remote);
   return new Request(url.toString(), { method: req.method, headers, duplex: "half" });
 }
 
