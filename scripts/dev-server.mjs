@@ -67,6 +67,27 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
+    const blockedPrefixes = [
+      "/lib/",
+      "/api/",
+      "/migrations/",
+      "/scripts/",
+      "/node_modules/",
+    ];
+    const blockedFiles = new Set([
+      "/package.json",
+      "/package-lock.json",
+      "/cursor-app.json",
+    ]);
+    if (
+      blockedPrefixes.some((p) => url.pathname.startsWith(p)) ||
+      blockedFiles.has(url.pathname)
+    ) {
+      res.writeHead(404);
+      res.end("Not found");
+      return;
+    }
+
     let filePath = url.pathname === "/" ? "/index.html" : url.pathname;
     filePath = path.normalize(filePath).replace(/^(\.\.(\/|\\|$))+/, "");
     const abs = path.join(root, filePath);
