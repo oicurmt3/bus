@@ -1,4 +1,4 @@
-import { cp, mkdir, rm } from "node:fs/promises";
+import { cp, mkdir, readdir, rm } from "node:fs/promises";
 import { spawnSync } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -22,7 +22,17 @@ for (const file of STATIC_FILES) {
   await cp(path.join(root, file), path.join(publicDir, file));
 }
 
-console.log(`build: copied ${STATIC_FILES.length} files to public/`);
+const jsDir = path.join(root, "js");
+const publicJsDir = path.join(publicDir, "js");
+await mkdir(publicJsDir, { recursive: true });
+const jsFiles = (await readdir(jsDir).catch(() => [])).filter((f) => f.endsWith(".js"));
+for (const file of jsFiles) {
+  await cp(path.join(jsDir, file), path.join(publicJsDir, file));
+}
+
+console.log(
+  `build: copied ${STATIC_FILES.length} static file(s) and ${jsFiles.length} JS module(s) to public/`
+);
 
 const migrate = spawnSync(process.execPath, ["scripts/migrate.mjs"], {
   cwd: root,

@@ -128,16 +128,15 @@ tr.detail-row td { background-color: var(--detail-row-bg); white-space: normal; 
             <p id="top-complaint">Top Complaint Category: Calculating...</p>
         </div>
     </div>
-    <script>
+    <script type="module">
+        import { loadRatings as fetchRatings } from './js/api-client.js';
+
         let initialData = [];
         let filteredData = [];
 
         async function loadRatings() {
             try {
-                const response = await fetch('/api/ratings');
-                if (!response.ok) throw new Error('Failed to load ratings');
-                const data = await response.json();
-                initialData = Array.isArray(data) ? data : [];
+                initialData = await fetchRatings();
             } catch (e) {
                 console.error('Failed to load ratings:', e);
                 initialData = [];

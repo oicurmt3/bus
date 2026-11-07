@@ -1,4 +1,4 @@
-import { assertSameOrigin, getClientIp, jsonResponse } from "../lib/http.js";
+import { getClientIp, jsonResponse } from "../lib/http.js";
 import { attachServerMetadata, insertRating } from "../lib/ratings.js";
 import { MAX_SUBMISSION_BYTES, validateAndSanitizeSubmission } from "../lib/sanitize.js";
 
@@ -6,10 +6,6 @@ export async function POST(request) {
   if (request.method !== "POST") {
     return jsonResponse({ status: "error", message: "Invalid request method." }, 405);
   }
-  if (!assertSameOrigin(request)) {
-    return jsonResponse({ status: "error", message: "Invalid request origin." }, 403);
-  }
-
   const contentLength = Number(request.headers.get("content-length") || 0);
   if (contentLength > MAX_SUBMISSION_BYTES) {
     return jsonResponse({ status: "error", message: "Submission is too large." }, 413);
