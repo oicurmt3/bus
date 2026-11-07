@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="Transperth, Bus, Perth, Ratings">
+    <meta name="description" content="View public bus ride ratings in Perth">
+    <title>Ride Rate Results - Transperth Bus Ride Ratings & Reports</title>
+<style>
+:root {
+    --bg-color: #2a2a2a;
+    --text-color: #e0e0e0;
+    --card-bg: #3c3c3c;
+    --border-color: #555;
+    --button-bg: #007bff;
+    --button-hover-bg: #0056b3;
+    --button-text: #ffffff;
+    --rating-positive: #28a745;
+    --rating-negative: #dc3545;
+    --highlight: #ff9800;
+    --detail-row-bg: #4a4a4a;
+    --rating-neutral-bg: #6c757d;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-color); color: var(--text-color); padding: 15px; }
+.container { max-width: 1200px; margin: 0px auto; padding: 10px; masterpage: 4; border-radius: 8px; background-color: var(--card-bg); border: 1px solid var(--border-color); box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); overflow-x: auto; }
+header { text-align: center; margin-bottom: 20px; }
+h1 { font-size: 1.8em; color: var(--highlight); }
+h1 span { display: block; font-weight: normal; font-size: 0.47em; color: var(--text-color); margin-top:5px;}
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border-color); white-space: nowrap; }
+th { background-color: #444; cursor: pointer; position: sticky; top: 0; color: var(--highlight); z-index: 1; }
+th:hover { background-color: #555; }
+td { background-color: var(--card-bg); vertical-align: middle; }
+tr.detail-row td { background-color: var(--detail-row-bg); white-space: normal; }
+.sortable::after { content: " ⇅"; font-size: 0.8em; }
+.map-btn { padding: 6px 12px; background-color: var(--button-bg); color: var(--button-text); border: none; border-radius: 5px; cursor: pointer; text-decoration: none; display: inline-block; }
+.map-btn:hover { background-color: var(--button-hover-bg); }
+.overall-toggle {
+    padding: 4px 8px; border-radius: 4px; color: #fff; border: none;
+    cursor: pointer; font-size: 0.9em; font-weight: bold; transition: background-color 0.2s;
+    min-width: 60px; text-align: center; display: inline-block;
+}
+.overall-toggle:hover { filter: brightness(1.2); }
+.rating-positive { background-color: var(--rating-positive); }
+.rating-negative { background-color: var(--rating-negative); }
+.rating-neutral { background-color: var(--rating-neutral-bg); }
+.pagination { margin: 20px 0; text-align: center; }
+.pagination button { padding: 8px 16px; background-color: var(--button-bg); color: var(--button-text); border: none; border-radius: 5px; cursor: pointer; margin: 0 5px; }
+.pagination button:disabled { background-color: #666; cursor: not-allowed; }
+.pagination button:hover:not(:disabled) { background-color: var(--button-hover-bg); }
+.detail-content { padding: 10px; }
+.detail-content span { display: inline-block; margin-right: 15px; margin-bottom: 5px; font-size: 0.9em; }
+.detail-content strong { color: var(--highlight); }
+.stats-container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+.stats-container h2 {
+    font-size: 1.5em;
+    color: var(--highlight);
+    text-align: center;
+    margin-bottom: 15px;
+}
+#stats-content p {
+    font-size: 0.95em;
+    margin-bottom: 10px;
+    color: var(--text-color);
+}
+@media (max-width: 768px) {
+     table { font-size: 0.9em; }
+     th, td { padding: 8px; }
+     .overall-toggle { font-size: 0.85em; padding: 3px 6px; }
+     .map-btn { padding: 4px 8px; font-size: 0.85em; }
+     .pagination .back-to-form { margin-top: 10px; }
+     .bottom-message {font-size:9px;}
+     h1 span { font-size: 13px; margin-top:5px;}
+     .stats-container {
+         padding: 10px;
+     }
+     .stats-container h2 {
+         font-size: 1.3em;
+     }
+     #stats-content p {
+         font-size: 0.85em;
+     }
+}
+</style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Ratings & Reports<span>Transperth Bus Ride Ratings & Reports</span></h1>
+        </header>
+        <table id="ratings-table">
+            <thead>
+                <tr>
+                    <th class="sortable" data-sort="bus_number">Bus</th>
+                    <th class="sortable" data-sort="route_number">Route</th>
+                    <th class="sortable" data-sort="destination">Destination</th>
+                    <th class="sortable" data-sort="start_timestamp">Date/Time</th>
+                    <th>Location*</th>
+                    <th class="sortable" data-sort="overall_experience">Overall</th>
+                </tr>
+            </thead>
+            <tbody id="table-body"></tbody>
+        </table>
+        <div class="pagination">
+            <button id="prev-page">Previous</button>
+            <span id="page-info"></span>
+            <button id="next-page">Next</button>
+            <button class="back-to-form" onclick="window.location.href='index.html'">Back to Form</button>
+        </div>
+        <p class="bottom-message">*Locations are a guide only and may not be accurate</p>
+    </div>
+    <div class="stats-container">
+        <header>
+            <h2>Rating Statistics</h2>
+        </header>
+        <div id="stats-content">
+            <p id="total-ratings">Total Ratings: Calculating...</p>
+            <p id="most-rated-route">Most Rated Route: Calculating...</p>
+            <p id="top-complaint">Top Complaint Category: Calculating...</p>
+        </div>
+    </div>
+    <script>
+        let initialData = [];
+        let filteredData = [];
+
+        async function loadRatings() {
+            try {
+                const response = await fetch('/api/ratings');
+                if (!response.ok) throw new Error('Failed to load ratings');
+                const data = await response.json();
+                initialData = Array.isArray(data) ? data : [];
+            } catch (e) {
+                console.error('Failed to load ratings:', e);
+                initialData = [];
+            }
+            filteredData = [...initialData];
+            if (!Array.isArray(filteredData)) {
+                filteredData = [];
+            }
+            try {
+                filteredData.sort((a, b) => {
+                    try {
+                        const dateA = parseTimestamp(a && a.start_timestamp ? a.start_timestamp : '');
+                        const dateB = parseTimestamp(b && b.start_timestamp ? b.start_timestamp : '');
+                        const valA = dateA ? dateA.getTime() : 0;
+                        const valB = dateB ? dateB.getTime() : 0;
+                        return valB - valA;
+                    } catch (e) {
+                        return 0;
+                    }
+                });
+                updateTable();
+            } catch (e) {
+                console.error('Error during initial table load:', e);
+                document.getElementById('table-body').innerHTML = '<tr><td colspan="6">Error loading table data.</td></tr>';
+            }
+        }
+
+        const itemsPerPage = 25;
+        let currentPage = 1;
+        let sortColumn = "start_timestamp";
+        let sortDirection = -1;
+
+        const negativeRatings = ['Worst ever', 'Terrible', 'Very Bad', 'Bad'];
+
+        function getRatingTexts(ratingDataArray) {
+            if (!Array.isArray(ratingDataArray)) return [];
+            try {
+                return ratingDataArray
+                    .map(item => (item && typeof item === 'object' && item.text) ? String(item.text).trim() : '')
+                    .filter(Boolean);
+            } catch (e) {
+                console.error("Error processing rating data array:", ratingDataArray, e);
+                return [];
+            }
+        }
+
+        function getRatingClass(ratingTexts) {
+            if (!Array.isArray(ratingTexts) || ratingTexts.length === 0) return 'rating-neutral';
+            return ratingTexts.some(text => negativeRatings.includes(text)) ? 'rating-negative' : 'rating-positive';
+        }
+
+        function parseTimestamp(ts) {
+            if (!ts || typeof ts !== 'string') return null;
+            const regex = /^(\d{2})\/(\d{2})\/(\d{4}), (\d{1,2}):(\d{2}) (am|pm)$/i;
+            const match = ts.match(regex);
+            if (!match) return null;
+
+            let [, day, month, year, hour, minute, period] = match;
+            hour = parseInt(hour, 10);
+            if (period.toLowerCase() === 'pm' && hour !== 12) hour += 12;
+            if (period.toLowerCase() === 'am' && hour === 12) hour = 0;
+
+            const date = new Date(year, month - 1, day, hour, minute);
+            return isNaN(date.getTime()) ? null : date;
+        }
+
+        function formatTimestamp(ts) {
+            if (!ts) return '';
+            const date = parseTimestamp(ts);
+            if (!date) return ts;
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+            let hours = date.getHours();
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            const period = hours >= 12 ? 'pm' : 'am';
+            hours = hours % 12 || 12;
+            return `${day}/${month}/${year}, ${hours}:${minutes} ${period}`;
+        }
+
+        function rowKey(row, index) {
+            return [
+                index,
+                row.start_timestamp || '',
+                row.bus_number || '',
+                row.route_number || '',
+                row.destination || ''
+            ].join('|');
+        }
+
+        function isCoordinate(value) {
+            return typeof value === 'string' && /^-?\d{1,3}(\.\d{1,8})?$/.test(value);
+        }
+
+        function appendTextCell(tr, text) {
+            const td = document.createElement('td');
+            td.textContent = text || '';
+            tr.appendChild(td);
+        }
+
+        function calculateStatistics(data) {
+            try {
+                if (!Array.isArray(data) || data.length === 0) {
+                    console.warn('No data available for statistics');
+                    return {
+                        totalRatings: 0,
+                        mostRatedRoute: 'No data',
+                        topComplaint: 'No data'
+                    };
+                }
+
+                // Total Ratings
+                const totalRatings = data.length;
+
+                // Most Rated Route
+                const routeCounts = {};
+                data.forEach(row => {
+                    try {
+                        const route = row && row.route_number ? String(row.route_number) : 'Unknown';
+                        routeCounts[route] = (routeCounts[route] || 0) + 1;
+                    } catch (e) {
+                        console.warn('Error processing route_number for row:', row, e);
+                    }
+                });
+                const mostRatedRouteEntry = Object.entries(routeCounts).reduce((max, entry) => 
+                    entry[1] > max[1] ? entry : max, ['None', 0]);
+                const mostRatedRoute = mostRatedRouteEntry[0] !== 'None' ? 
+                    `${mostRatedRouteEntry[0]} (${mostRatedRouteEntry[1]} ratings)` : 'No data';
+
+                // Top Complaint Category
+                const complaintCategories = [
+                    { key: 'braking_quality', label: 'Braking Quality' },
+                    { key: 'acceleration_quality', label: 'Acceleration Quality' },
+                    { key: 'cornering_quality', label: 'Cornering Quality' },
+                    { key: 'cleanliness', label: 'Cleanliness' },
+                    { key: 'driver_conduct', label: 'Driver Conduct' },
+                    { key: 'passenger_conduct', label: 'Passenger Conduct' }
+                ];
+                const complaintCounts = complaintCategories.reduce((acc, cat) => {
+                    acc[cat.key] = 0;
+                    return acc;
+                }, {});
+                const ratingTextCounts = complaintCategories.reduce((acc, cat) => {
+                    acc[cat.key] = {};
+                    return acc;
+                }, {});
+                data.forEach(row => {
+                    try {
+                        complaintCategories.forEach(cat => {
+                            if (row && row[cat.key] && Array.isArray(row[cat.key])) {
+                                row[cat.key].forEach(item => {
+                                    const score = parseInt(item.value, 10);
+                                    if (!isNaN(score) && score < 5) {
+                                        complaintCounts[cat.key]++;
+                                        const text = item.text || 'Unknown';
+                                        ratingTextCounts[cat.key][text] = (ratingTextCounts[cat.key][text] || 0) + 1;
+                                    }
+                                });
+                            }
+                        });
+                    } catch (e) {
+                        console.warn('Error processing complaints for row:', row, e);
+                    }
+                });
+                const topComplaintEntry = Object.entries(complaintCounts).reduce((max, entry) => 
+                    entry[1] > max[1] ? entry : max, ['none', 0]);
+                const topComplaintLabel = complaintCategories.find(cat => cat.key === topComplaintEntry[0])?.label || 'None';
+                let topComplaint = topComplaintEntry[1] > 0 ? `${topComplaintLabel} (${topComplaintEntry[1]} negative ratings)` : 'No negative ratings';
+                if (topComplaintEntry[0] !== 'none') {
+                    const topRatingText = Object.entries(ratingTextCounts[topComplaintEntry[0]]).reduce((max, entry) => 
+                        entry[1] > max[1] ? entry : max, ['Unknown', 0]);
+                    topComplaint = `${topComplaintLabel} (${topRatingText[1]} ratings of '${topRatingText[0]}')`;
+                }
+
+                return {
+                    totalRatings,
+                    mostRatedRoute,
+                    topComplaint
+                };
+            } catch (e) {
+                console.error('Error in calculateStatistics:', e);
+                return {
+                    totalRatings: 0,
+                    mostRatedRoute: 'Error',
+                    topComplaint: 'Error'
+                };
+            }
+        }
+
+        function updateStatistics() {
+            try {
+                const stats = calculateStatistics(filteredData);
+                document.getElementById('total-ratings').textContent = `Total Ratings: ${stats.totalRatings}`;
+                document.getElementById('most-rated-route').textContent = `Most Rated Route: ${stats.mostRatedRoute}`;
+                document.getElementById('top-complaint').textContent = `Top Complaint Category: ${stats.topComplaint}`;
+            } catch (e) {
+                console.error('Error in updateStatistics:', e);
+                document.getElementById('total-ratings').textContent = 'Total Ratings: Error';
+                document.getElementById('most-rated-route').textContent = 'Most Rated Route: Error';
+                document.getElementById('top-complaint').textContent = 'Top Complaint Category: Error';
+            }
+        }
+
+        function renderTable(pageData) {
+            try {
+                const tbody = document.getElementById('table-body');
+                tbody.innerHTML = '';
+                if (!Array.isArray(pageData)) {
+                    console.warn('pageData is not an array:', pageData);
+                    return;
+                }
+
+                pageData.forEach((row, pageIndex) => {
+                    try {
+                        if (typeof row !== 'object' || row === null) return;
+
+                        const dataIndex = filteredData.indexOf(row);
+                        const uniqueId = rowKey(row, dataIndex >= 0 ? dataIndex : pageIndex);
+                        const tr = document.createElement('tr');
+                        tr.dataset.id = uniqueId;
+
+                        const overallTexts = getRatingTexts(row.overall_experience);
+                        const overallDisplay = overallTexts.length > 0 ? overallTexts.join(', ') : 'N/A';
+                        const overallClass = getRatingClass(overallTexts);
+
+                        appendTextCell(tr, row.bus_number);
+                        appendTextCell(tr, row.route_number);
+                        appendTextCell(tr, row.destination);
+                        appendTextCell(tr, formatTimestamp(row.start_timestamp));
+
+                        const locationCell = document.createElement('td');
+                        if (isCoordinate(row.start_latitude) && isCoordinate(row.start_longitude)) {
+                            const mapLink = document.createElement('a');
+                            mapLink.href = `https://maps.google.com/?q=${encodeURIComponent(row.start_latitude)},${encodeURIComponent(row.start_longitude)}`;
+                            mapLink.target = '_blank';
+                            mapLink.rel = 'noopener noreferrer';
+                            mapLink.className = 'map-btn';
+                            mapLink.textContent = 'Map';
+                            locationCell.appendChild(mapLink);
+                        }
+                        tr.appendChild(locationCell);
+
+                        const overallCell = document.createElement('td');
+                        const overallButton = document.createElement('button');
+                        overallButton.type = 'button';
+                        overallButton.className = `overall-toggle ${overallClass}`;
+                        overallButton.dataset.rowId = uniqueId;
+                        overallButton.textContent = overallDisplay;
+                        overallCell.appendChild(overallButton);
+                        tr.appendChild(overallCell);
+
+                        tbody.appendChild(tr);
+                    } catch (e) {
+                        console.warn('Error rendering row:', row, e);
+                    }
+                });
+            } catch (e) {
+                console.error('Error in renderTable:', e);
+                document.getElementById('table-body').innerHTML = '<tr><td colspan="6">Error loading table data.</td></tr>';
+            }
+        }
+
+        function toggleDetailRow(button) {
+            try {
+                const rowId = button.dataset.rowId;
+                const mainRow = document.querySelector(`tr[data-id="${rowId}"]`);
+                const existingDetailRow = document.getElementById(`detail-${rowId}`);
+
+                if (existingDetailRow) { existingDetailRow.remove(); return; }
+
+                const rowData = filteredData.find((row, index) => {
+                    if (typeof row !== 'object' || row === null) return false;
+                    return rowKey(row, index) === rowId;
+                });
+
+                if (!rowData) {
+                    console.error("Could not find data for rowId:", rowId);
+                    alert("Error: Could not retrieve details.");
+                    return;
+                }
+
+                const detailRow = document.createElement('tr');
+                detailRow.id = `detail-${rowId}`;
+                detailRow.classList.add('detail-row');
+                const detailCell = document.createElement('td');
+                detailCell.colSpan = 6;
+
+                const detailWrap = document.createElement('div');
+                detailWrap.className = 'detail-content';
+                const ratingFields = [
+                    { key: 'braking_quality', label: 'Braking' },
+                    { key: 'acceleration_quality', label: 'Acceleration' },
+                    { key: 'cornering_quality', label: 'Cornering' },
+                    { key: 'cleanliness', label: 'Cleanliness' },
+                    { key: 'crowdedness', label: 'Crowdedness' },
+                    { key: 'driver_conduct', label: 'Driver Conduct' },
+                    { key: 'passenger_conduct', label: 'Passenger Conduct' }
+                ];
+                let detailsFound = false;
+
+                function appendDetailLine(label, value) {
+                    const line = document.createElement('span');
+                    const strong = document.createElement('strong');
+                    strong.textContent = `${label}:`;
+                    line.appendChild(strong);
+                    line.appendChild(document.createTextNode(` ${value}`));
+                    detailWrap.appendChild(line);
+                }
+
+                ratingFields.forEach(field => {
+                    try {
+                        if (rowData[field.key]) {
+                            const texts = getRatingTexts(rowData[field.key]);
+                            if (texts.length > 0) {
+                                appendDetailLine(field.label, texts.join(', '));
+                                detailsFound = true;
+                            }
+                        }
+                    } catch (e) {
+                        console.warn(`Error processing ${field.key} for detail row:`, e);
+                    }
+                });
+                try {
+                    if (rowData.comments) {
+                        appendDetailLine('Comments', String(rowData.comments));
+                        detailsFound = true;
+                    }
+                } catch (e) {
+                    console.warn('Error processing comments for detail row:', e);
+                }
+                if (!detailsFound) {
+                    const empty = document.createElement('span');
+                    empty.textContent = 'No additional rating details or comments provided.';
+                    detailWrap.appendChild(empty);
+                }
+                detailCell.appendChild(detailWrap);
+                detailRow.appendChild(detailCell);
+
+                if (mainRow?.parentNode) {
+                    mainRow.parentNode.insertBefore(detailRow, mainRow.nextSibling);
+                } else {
+                    console.error("Could not find main row or parent node.");
+                }
+            } catch (e) {
+                console.error('Error in toggleDetailRow:', e);
+            }
+        }
+
+        document.getElementById('table-body').addEventListener('click', (event) => {
+            const button = event.target.closest('.overall-toggle');
+            if (button) { toggleDetailRow(button); }
+        });
+
+        function updateTable() {
+            try {
+                document.querySelectorAll('.detail-row').forEach(row => row.remove());
+                if (sortColumn) {
+                    const dataToSort = [...filteredData];
+                    dataToSort.sort((a, b) => {
+                        try {
+                            if (typeof a !== 'object' || a === null) return 1;
+                            if (typeof b !== 'object' || b === null) return -1;
+                            let valA = a[sortColumn] || '';
+                            let valB = b[sortColumn] || '';
+                            if (sortColumn === 'overall_experience') {
+                                valA = getRatingTexts(a.overall_experience)[0] || '';
+                                valB = getRatingTexts(b.overall_experience)[0] || '';
+                            } else if (sortColumn === 'start_timestamp') {
+                                const dateA = parseTimestamp(valA);
+                                const dateB = parseTimestamp(valB);
+                                valA = dateA ? dateA.getTime() : 0;
+                                valB = dateB ? dateB.getTime() : 0;
+                                return (valA - valB) * sortDirection;
+                            } else if (sortColumn === 'bus_number' || sortColumn === 'route_number') {
+                                const numA = parseFloat(valA);
+                                const numB = parseFloat(valB);
+                                if (!isNaN(numA) && !isNaN(numB)) return (numA - numB) * sortDirection;
+                            }
+                            valA = String(valA).toLowerCase();
+                            valB = String(valB).toLowerCase();
+                            return (valA < valB ? -1 : valA > valB ? 1 : 0) * sortDirection;
+                        } catch (e) {
+                            console.warn('Error sorting data:', a, b, e);
+                            return 0;
+                        }
+                    });
+                    filteredData = dataToSort;
+                }
+                const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+                currentPage = Math.max(1, Math.min(currentPage, totalPages || 1));
+                const start = (currentPage - 1) * itemsPerPage;
+                const end = start + itemsPerPage;
+                const pageData = filteredData.slice(start, end);
+                renderTable(pageData);
+                document.getElementById('page-info').textContent = filteredData.length > 0 ? `Page ${currentPage} of ${totalPages}` : 'No results';
+                document.getElementById('prev-page').disabled = currentPage === 1;
+                document.getElementById('next-page').disabled = end >= filteredData.length;
+                updateStatistics(); // Update stats after table rendering
+            } catch (e) {
+                console.error('Error in updateTable:', e);
+                document.getElementById('table-body').innerHTML = '<tr><td colspan="6">Error loading table data.</td></tr>';
+                document.getElementById('page-info').textContent = 'Error';
+            }
+        }
+
+        function sortTable(column) {
+            try {
+                if (sortColumn === column) { sortDirection *= -1; }
+                else {
+                    sortColumn = column;
+                    sortDirection = column === 'start_timestamp' ? -1 : 1;
+                }
+                updateTable();
+            } catch (e) {
+                console.error('Error in sortTable:', e);
+            }
+        }
+
+        document.querySelectorAll('.sortable').forEach(th => {
+            th.addEventListener('click', () => sortTable(th.dataset.sort));
+        });
+        document.getElementById('prev-page').addEventListener('click', () => {
+            if (currentPage > 1) { currentPage--; updateTable(); }
+        });
+        document.getElementById('next-page').addEventListener('click', () => {
+            if (currentPage * itemsPerPage < filteredData.length) { currentPage++; updateTable(); }
+        });
+
+        loadRatings();
+    </script>
+</body>
+</html>
