@@ -3,7 +3,12 @@ import {
   issueAdminToken,
   verifyAdminPassword,
 } from "../lib/admin.js";
-import { jsonResponse } from "../lib/http.js";
+import {
+  adminLoginAllowed,
+  loginDelay,
+  recordAdminLoginAttempt,
+} from "../lib/admin-login-limit.js";
+import { getClientIp, hashClientKey, jsonResponse } from "../lib/http.js";
 
 export async function POST(request) {
   if (!adminPasswordConfigured()) {
@@ -13,15 +18,28 @@ export async function POST(request) {
     );
   }
 
+  const clientKey = hashClientKey(getClientIp(request));
+  if (!(await adminLoginAllowed(clientKey))) {
+    await loginDelay();
+    return jsonResponse(
+      { status: "error", message: "Too many sign-in attempts. Try again later." },
+      429
+    );
+  }
+
   let body;
   try {
     body = await request.json();
   } catch {
+    await recordAdminLoginAttempt(clientKey);
+    await loginDelay();
     return jsonResponse({ status: "error", message: "Invalid JSON body." }, 400);
   }
 
   const password = typeof body.password === "string" ? body.password : "";
   if (!verifyAdminPassword(password)) {
+    await recordAdminLoginAttempt(clientKey);
+    await loginDelay();
     return jsonResponse({ status: "error", message: "Invalid password." }, 401);
   }
 
