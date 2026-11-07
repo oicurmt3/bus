@@ -129,40 +129,46 @@ tr.detail-row td { background-color: var(--detail-row-bg); white-space: normal; 
         </div>
     </div>
     <script>
-        let initialData = <?php
-            $jsonData = [];
-            $jsonFilePath = __DIR__ . '/bus_ratings.json';
-            if (file_exists($jsonFilePath)) {
-                $jsonContent = file_get_contents($jsonFilePath);
-                if ($jsonContent !== false && trim($jsonContent) !== '') {
-                    $decodedData = json_decode($jsonContent, true);
-                    if (json_last_error() === JSON_ERROR_NONE && is_array($decodedData)) {
-                        $jsonData = $decodedData;
-                    } else {
-                        error_log("PHP Warning: Could not decode '$jsonFilePath' or it's not an array. Error: " . json_last_error_msg());
-                        echo '[]'; // Fallback to empty array
-                    }
-                } else {
-                    error_log("PHP Warning: Could not read '$jsonFilePath' or it's empty.");
-                    echo '[]'; // Fallback to empty array
-                }
-            } else {
-                error_log("PHP Warning: Data file '$jsonFilePath' not found.");
-                echo '[]'; // Fallback to empty array
+        let initialData = [];
+        let filteredData = [];
+
+        async function loadRatings() {
+            try {
+                const response = await fetch('/api/ratings');
+                if (!response.ok) throw new Error('Failed to load ratings');
+                const data = await response.json();
+                initialData = Array.isArray(data) ? data : [];
+            } catch (e) {
+                console.error('Failed to load ratings:', e);
+                initialData = [];
             }
-            echo json_encode($jsonData);
-        ?>;
-        if (!Array.isArray(initialData)) {
-            console.error('initialData is not an array:', initialData);
-            initialData = [];
+            filteredData = [...initialData];
+            if (!Array.isArray(filteredData)) {
+                filteredData = [];
+            }
+            try {
+                filteredData.sort((a, b) => {
+                    try {
+                        const dateA = parseTimestamp(a && a.start_timestamp ? a.start_timestamp : '');
+                        const dateB = parseTimestamp(b && b.start_timestamp ? b.start_timestamp : '');
+                        const valA = dateA ? dateA.getTime() : 0;
+                        const valB = dateB ? dateB.getTime() : 0;
+                        return valB - valA;
+                    } catch (e) {
+                        return 0;
+                    }
+                });
+                updateTable();
+            } catch (e) {
+                console.error('Error during initial table load:', e);
+                document.getElementById('table-body').innerHTML = '<tr><td colspan="6">Error loading table data.</td></tr>';
+            }
         }
-        console.log('initialData:', initialData); // Debug: Log data to console
 
         const itemsPerPage = 25;
         let currentPage = 1;
         let sortColumn = "start_timestamp";
         let sortDirection = -1;
-        let filteredData = [...initialData];
 
         const negativeRatings = ['Worst ever', 'Terrible', 'Very Bad', 'Bad'];
 
@@ -212,15 +218,24 @@ tr.detail-row td { background-color: var(--detail-row-bg); white-space: normal; 
             return `${day}/${month}/${year}, ${hours}:${minutes} ${period}`;
         }
 
-        function md5(str) {
-            let hash = 0;
-            if (!str || typeof str !== 'string' || str.length === 0) return '0';
-            for (let i = 0; i < str.length; i++) {
-                const char = str.charCodeAt(i);
-                hash = ((hash << 5) - hash) + char;
-                hash |= 0;
-            }
-            return (hash >>> 0).toString(16);
+        function rowKey(row, index) {
+            return [
+                index,
+                row.start_timestamp || '',
+                row.bus_number || '',
+                row.route_number || '',
+                row.destination || ''
+            ].join('|');
+        }
+
+        function isCoordinate(value) {
+            return typeof value === 'string' && /^-?\d{1,3}(\.\d{1,8})?$/.test(value);
+        }
+
+        function appendTextCell(tr, text) {
+            const td = document.createElement('td');
+            td.textContent = text || '';
+            tr.appendChild(td);
         }
 
         function calculateStatistics(data) {
@@ -335,11 +350,12 @@ tr.detail-row td { background-color: var(--detail-row-bg); white-space: normal; 
                     return;
                 }
 
-                pageData.forEach((row, index) => {
+                pageData.forEach((row, pageIndex) => {
                     try {
                         if (typeof row !== 'object' || row === null) return;
 
-                        const uniqueId = md5((row.serverTimestamp || `no_ts_${index}`) + (row.ipAddress || `no_ip_${index}`) + index);
+                        const dataIndex = filteredData.indexOf(row);
+                        const uniqueId = rowKey(row, dataIndex >= 0 ? dataIndex : pageIndex);
                         const tr = document.createElement('tr');
                         tr.dataset.id = uniqueId;
 
@@ -347,18 +363,32 @@ tr.detail-row td { background-color: var(--detail-row-bg); white-space: normal; 
                         const overallDisplay = overallTexts.length > 0 ? overallTexts.join(', ') : 'N/A';
                         const overallClass = getRatingClass(overallTexts);
 
-                        tr.innerHTML = `
-                            <td>${row.bus_number || ''}</td>
-                            <td>${row.route_number || ''}</td>
-                            <td>${row.destination || ''}</td>
-                            <td>${formatTimestamp(row.start_timestamp)}</td>
-                            <td>${row.start_latitude && row.start_longitude ? `<a href="https://maps.google.com/?q=${row.start_latitude},${row.start_longitude}" target="_blank" class="map-btn">Map</a>` : ''}</td>
-                            <td>
-                                <button class="overall-toggle ${overallClass}" data-row-id="${uniqueId}">
-                                    ${overallDisplay}
-                                </button>
-                            </td>
-                        `;
+                        appendTextCell(tr, row.bus_number);
+                        appendTextCell(tr, row.route_number);
+                        appendTextCell(tr, row.destination);
+                        appendTextCell(tr, formatTimestamp(row.start_timestamp));
+
+                        const locationCell = document.createElement('td');
+                        if (isCoordinate(row.start_latitude) && isCoordinate(row.start_longitude)) {
+                            const mapLink = document.createElement('a');
+                            mapLink.href = `https://maps.google.com/?q=${encodeURIComponent(row.start_latitude)},${encodeURIComponent(row.start_longitude)}`;
+                            mapLink.target = '_blank';
+                            mapLink.rel = 'noopener noreferrer';
+                            mapLink.className = 'map-btn';
+                            mapLink.textContent = 'Map';
+                            locationCell.appendChild(mapLink);
+                        }
+                        tr.appendChild(locationCell);
+
+                        const overallCell = document.createElement('td');
+                        const overallButton = document.createElement('button');
+                        overallButton.type = 'button';
+                        overallButton.className = `overall-toggle ${overallClass}`;
+                        overallButton.dataset.rowId = uniqueId;
+                        overallButton.textContent = overallDisplay;
+                        overallCell.appendChild(overallButton);
+                        tr.appendChild(overallCell);
+
                         tbody.appendChild(tr);
                     } catch (e) {
                         console.warn('Error rendering row:', row, e);
@@ -380,8 +410,7 @@ tr.detail-row td { background-color: var(--detail-row-bg); white-space: normal; 
 
                 const rowData = filteredData.find((row, index) => {
                     if (typeof row !== 'object' || row === null) return false;
-                    const currentId = md5((row.serverTimestamp || `no_ts_${index}`) + (row.ipAddress || `no_ip_${index}`) + index);
-                    return currentId === rowId;
+                    return rowKey(row, index) === rowId;
                 });
 
                 if (!rowData) {
@@ -396,7 +425,8 @@ tr.detail-row td { background-color: var(--detail-row-bg); white-space: normal; 
                 const detailCell = document.createElement('td');
                 detailCell.colSpan = 6;
 
-                let detailHtml = '<div class="detail-content">';
+                const detailWrap = document.createElement('div');
+                detailWrap.className = 'detail-content';
                 const ratingFields = [
                     { key: 'braking_quality', label: 'Braking' },
                     { key: 'acceleration_quality', label: 'Acceleration' },
@@ -407,12 +437,22 @@ tr.detail-row td { background-color: var(--detail-row-bg); white-space: normal; 
                     { key: 'passenger_conduct', label: 'Passenger Conduct' }
                 ];
                 let detailsFound = false;
+
+                function appendDetailLine(label, value) {
+                    const line = document.createElement('span');
+                    const strong = document.createElement('strong');
+                    strong.textContent = `${label}:`;
+                    line.appendChild(strong);
+                    line.appendChild(document.createTextNode(` ${value}`));
+                    detailWrap.appendChild(line);
+                }
+
                 ratingFields.forEach(field => {
                     try {
                         if (rowData[field.key]) {
                             const texts = getRatingTexts(rowData[field.key]);
                             if (texts.length > 0) {
-                                detailHtml += `<span><strong>${field.label}:</strong> ${texts.join(', ')}</span>`;
+                                appendDetailLine(field.label, texts.join(', '));
                                 detailsFound = true;
                             }
                         }
@@ -422,17 +462,18 @@ tr.detail-row td { background-color: var(--detail-row-bg); white-space: normal; 
                 });
                 try {
                     if (rowData.comments) {
-                        detailHtml += `<span><strong>Comments:</strong> ${rowData.comments}</span>`;
+                        appendDetailLine('Comments', String(rowData.comments));
                         detailsFound = true;
                     }
                 } catch (e) {
                     console.warn('Error processing comments for detail row:', e);
                 }
                 if (!detailsFound) {
-                    detailHtml += '<span>No additional rating details or comments provided.</span>';
+                    const empty = document.createElement('span');
+                    empty.textContent = 'No additional rating details or comments provided.';
+                    detailWrap.appendChild(empty);
                 }
-                detailHtml += '</div>';
-                detailCell.innerHTML = detailHtml;
+                detailCell.appendChild(detailWrap);
                 detailRow.appendChild(detailCell);
 
                 if (mainRow?.parentNode) {
@@ -525,25 +566,7 @@ tr.detail-row td { background-color: var(--detail-row-bg); white-space: normal; 
             if (currentPage * itemsPerPage < filteredData.length) { currentPage++; updateTable(); }
         });
 
-        // Sort data by start_timestamp in descending order (newest first) on initial load
-        try {
-            filteredData.sort((a, b) => {
-                try {
-                    const dateA = parseTimestamp(a && a.start_timestamp ? a.start_timestamp : '');
-                    const dateB = parseTimestamp(b && b.start_timestamp ? b.start_timestamp : '');
-                    const valA = dateA ? dateA.getTime() : 0;
-                    const valB = dateB ? dateB.getTime() : 0;
-                    return valB - valA; // Descending order (newest first)
-                } catch (e) {
-                    console.warn('Error sorting initial data:', a, b, e);
-                    return 0;
-                }
-            });
-            updateTable();
-        } catch (e) {
-            console.error('Error during initial table load:', e);
-            document.getElementById('table-body').innerHTML = '<tr><td colspan="6">Error loading table data.</td></tr>';
-        }
+        loadRatings();
     </script>
 </body>
 </html>
