@@ -1,8 +1,8 @@
 import http from "node:http";
-import { readFile } from "node:fs/promises";
 import { createReadStream, existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { TRUSTED_CLIENT_IP_HEADER } from "../lib/http.js";
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const port = Number(process.env.PORT || 8765);
@@ -26,10 +26,13 @@ function webRequest(req) {
   const url = new URL(req.url || "/", `http://${host}`);
   const headers = new Headers();
   for (const [key, value] of Object.entries(req.headers)) {
-    if (value !== undefined) {
-      headers.set(key, Array.isArray(value) ? value.join(", ") : String(value));
-    }
+    if (value === undefined) continue;
+    const lower = key.toLowerCase();
+    if (lower === "x-forwarded-for" || lower === "x-real-ip") continue;
+    headers.set(key, Array.isArray(value) ? value.join(", ") : String(value));
   }
+  const remote = req.socket?.remoteAddress?.replace(/^::ffff:/, "") || "127.0.0.1";
+  headers.set(TRUSTED_CLIENT_IP_HEADER, remote);
   return new Request(url.toString(), { method: req.method, headers, duplex: "half" });
 }
 
@@ -73,12 +76,21 @@ const server = http.createServer(async (req, res) => {
       "/migrations/",
       "/scripts/",
       "/node_modules/",
+      "/cpanel/",
+      "/data/",
     ];
     const blockedFiles = new Set([
       "/package.json",
       "/package-lock.json",
       "/cursor-app.json",
+      "/log_rating.php",
+      "/view_ratings.php",
     ]);
+    if (url.pathname.toLowerCase().endsWith(".php")) {
+      res.writeHead(404);
+      res.end("Not found");
+      return;
+    }
     if (
       blockedPrefixes.some((p) => url.pathname.startsWith(p)) ||
       blockedFiles.has(url.pathname)

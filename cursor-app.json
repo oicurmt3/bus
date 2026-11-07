@@ -1,3 +1,10 @@
 {
-  "database": "postgres"
+  "database": "postgres",
+  "exclude": [
+    "cpanel/**",
+    "**/*.php",
+    "data/**",
+    "bus_ratings.json",
+    "bus_ratings.csv"
+  ]
 }

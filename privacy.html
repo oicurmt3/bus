@@ -68,7 +68,7 @@
             <li><strong>Timestamp Information:</strong> The date and time of your bus ride, as provided by you, and a server-side timestamp (UTC) when the rating or report is submitted.</li>
             <li><strong>Bus Ride Details:</strong> Information you provide, such as the bus route, destination, and overall rating.</li>
             <li><strong>User Comments:</strong> Any additional comments you voluntarily provide in the comments field (limited to 500 characters). <span class="warning">We advise against including personally identifiable information in the comments field.</span></li>
-            <li><strong>Technical Information:</strong> Your IP address is automatically logged by the server when you submit a rating or report for security and diagnostic purposes. We may also collect a client-side submission timestamp.</li>
+            <li><strong>Technical Information:</strong> We may record a one-way hash of your connection address for abuse prevention (not stored with your rating). We may also collect a client-side submission timestamp.</li>
             <li><strong>Cookies:</strong> We may use cookies solely to limit the number of submissions from a single browser within a specific time period to prevent abuse of the Service (see Section 7).</li>
         </ul>
         <p>Collection of location data and other details occurs when you submit a rating or report. <span class="warning">By using the Service and submitting a rating or report, you consent to the collection of this information as described.</span></p>
@@ -77,28 +77,28 @@
         <p>We use the collected information for the primary purposes of:</p>
         <ul>
             <li>Operating and maintaining the Rate My Ride Service.</li>
-            <li>Recording and displaying user-submitted ratings and reports (including bus route, destination, date/time, location, overall rating, and comments) publicly via the "Ratings & Reports" page (view_ratings.php).</li>
+            <li>Recording and displaying user-submitted ratings and reports (including bus route, destination, date/time, approximate location, overall rating, and comments) publicly via the "Ratings & Reports" page.</li>
             <li>Compiling rating statistics, such as total ratings, most rated route, and top complaint category, for public display.</li>
-            <li>Monitoring and preventing misuse or abuse of the Service (e.g., using IP addresses and submission timestamps).</li>
+            <li>Monitoring and preventing misuse or abuse of the Service (e.g., using rate limits and submission timestamps).</li>
             <li>Troubleshooting and improving the Service.</li>
         </ul>
-        <p><span class="warning">Public Disclosure:</span> Please be aware that information submitted (excluding your IP address but including location, date/time, bus route, destination, rating, and comments) is made publicly available through the "Ratings & Reports" page. Do not submit any information you are not comfortable sharing publicly.</p>
-        <p>We do not sell or rent your personal information to third parties. We will not disclose your IP address publicly, except where required by law or for legitimate security investigations.</p>
+        <p><span class="warning">Public Disclosure:</span> Please be aware that information submitted (including approximate location rounded to about one kilometre, date/time, bus route, destination, rating, and comments) is made publicly available through the "Ratings & Reports" page. Do not submit any information you are not comfortable sharing publicly.</p>
+        <p>We do not sell or rent your personal information to third parties. Connection addresses are not published with ratings.</p>
         <p>We may use aggregated, anonymized data (which does not identify individuals) for analytical purposes, such as calculating rating statistics.</p>
 
         <h2>3. Data Quality (APP 10)</h2>
         <p>We rely on you to provide accurate information, including location, date/time, and bus ride details. We take no responsibility for the accuracy of user-submitted information. Locations are provided as a guide only and may not be accurate.</p>
 
         <h2>4. Data Security (APP 11)</h2>
-        <p>We take reasonable steps to protect the information we hold from misuse, interference, loss, and unauthorized access, modification, or disclosure. Data is stored securely on the web server. However, no internet transmission or electronic storage method is 100% secure. Access to server logs containing IP addresses is restricted.</p>
+        <p>We take reasonable steps to protect the information we hold from misuse, interference, loss, and unauthorized access, modification, or disclosure. Data is stored securely on the web server. However, no internet transmission or electronic storage method is 100% secure.</p>
 
         <h2>5. Access and Correction (APP 12 & 13)</h2>
         <p>The information submitted via the Service is intended to be publicly logged. Given the nature of the Service and the public display of ratings and reports, direct access to or correction of specific submissions by users is generally not provided through an automated interface.</p>
         <p>If you have submitted information that you believe is incorrect or contains sensitive personal details you wish to have removed, please contact us using the details below. We will assess requests on a case-by-case basis, but removal may not always be feasible or immediate.</p>
-        <p>You generally cannot access the IP address information we hold as it is used for security purposes.</p>
+        <p>You generally cannot access abuse-prevention hashes we use for rate limiting.</p>
 
         <h2>6. Anonymity (APP 2)</h2>
-        <p>While you do not need to provide your name or contact details to use the Service, please be aware that the combination of location data, timestamp, bus ride details, and comments, along with the logging of your IP address, means your submissions are not entirely anonymous.</p>
+        <p>While you do not need to provide your name or contact details to use the Service, please be aware that the combination of approximate location, timestamp, bus ride details, and comments means your submissions are not entirely anonymous.</p>
 
         <h2>7. Cookies</h2>
         <p>We may use browser cookies to manage submission frequency and prevent abuse. These cookies store non-personally identifiable information related to submission counts and timestamps on your device. You can manage cookie preferences through your browser settings, but disabling cookies may affect your ability to submit ratings or reports if rate limiting is active.</p>
